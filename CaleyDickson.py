@@ -2,16 +2,18 @@
     '__pos__', '__pow__', '__radd__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rmod__', '__rmul__', '__round__', '__rpow__', '__rsub__', '__rtruediv__', '__set_format__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', 'as_integer_ratio', 'conjugate', 'fromhex', 'hex', 'imag', 'is_integer', 'real']
 
 
+# abs add bool eq float floordiv format int le totalorder mod mul neg pos pow radd
+
 def reals(basis=float):
     class Real:
         dimensions = 1
 
-        def __init__(self, val):
-            self.val = val
+        def __init__(self, val=None):
+            self.val = basis() if val is None else basis(val)
 
         @property
-        def conj(self):
-            return Real(self)
+        def conjugate(self):
+            return Real(self.val)
 
         def __add__(self, other):
             return Real(self.val + other)
