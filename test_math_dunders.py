@@ -48,6 +48,8 @@ class TestMathDunders(unittest.TestCase):
         self.check(bool(r()), False, bool)
         self.check(bool(r(1)), True, bool)
         self.check(bool(r(0.00001)), True, bool)
+        self.check(r(9) < r(10), True, bool)
+        self.check(r(90) >= r(10), True, bool)
 
     # Unary Dunder Tests:
 

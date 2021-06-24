@@ -1,6 +1,5 @@
 from decimal import Decimal
 from math_dunders import math_dunders
-from math import ceil, floor, trunc
 
 
 def reals(base=float):
@@ -30,12 +29,6 @@ def reals(base=float):
 
 
 def cayley_dicksonize(basis):
-
-    def make_unary_dunder(func):
-        def dunder(self):
-            return Hypercomplex(func(self.a), func(self.b), pair=True)
-        return dunder
-
     class Hypercomplex:
         dimensions = 2 * basis.dimensions  # TODO use dimensions for type casting
 
@@ -86,31 +79,35 @@ def cayley_dicksonize(basis):
 
         # Unary Mathematical Dunders:
 
-        def __abs__(self):  # todo
-            pass
+        def __abs__(self):
+            pass  # todo
 
-        __ceil__ = make_unary_dunder(ceil)
-        __floor__ = make_unary_dunder(floor)
-        __neg__ = make_unary_dunder(lambda x: -x)
-        __pos__ = make_unary_dunder(lambda x: +x)
-        __round__ = make_unary_dunder(round)
-        __trunc__ = make_unary_dunder(trunc)
+        def __neg__(self):
+            return Hypercomplex(-self.a, -self.b, pair=True)
+
+        def __pos__(self):
+            return self.copy()
 
         # Binary Mathematical Dunders:
 
         def __add__(self, other):
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
-        def __sub__(self, other):
-            return self + (-other)
-
         def __mul__(self, other):
             a = self.a * other.a - other.b.conjugate() * self.b
             b = other.b * self.a + self.b * other.a.conjugate()
             return Hypercomplex(a, b, pair=True)
 
+        def __pow__(self, other):
+            pass  # todo
+
+        def __sub__(self, other):
+            return Hypercomplex(self.a - other.a, self.b - other.b, pair=True)
+
         def __truediv__(self, other):
-            pass
+            pass  # todo
+
+        # TODO radd rmul rpow rsub rtruediv
 
     return Hypercomplex
 
@@ -123,10 +120,8 @@ Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
 r = Sedenion(3.9, 2.8, 9.9)
-
-print(-ceil(r))
-print(floor(r))
-
+q = +r
+print(-q)
 # print(type(r.conjugate()))
 
 

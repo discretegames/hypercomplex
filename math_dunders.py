@@ -9,7 +9,7 @@ binary = dunderize(binary + [f"r{name}" for name in binary])
 
 
 def math_dunders(base: type = float) -> callable:
-    """Class decorator factory that adds mathematical dunder methods."""
+    """Class decorator that adds mathematical dunder methods."""
     def decorator(cls):
         def make_dunder(name):  # Needed to encapsulate name.
             def dunder(self, *args):
