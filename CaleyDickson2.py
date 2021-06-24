@@ -97,6 +97,7 @@ Complex = cayley_dicksonize(float)
 Quaternion = cayley_dicksonize(Complex)
 Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
+Trigintaduonion = cayley_dicksonize(Sedenion)
 
 c = Complex(1, 2)
 q = Quaternion(c, c, pair=True)
