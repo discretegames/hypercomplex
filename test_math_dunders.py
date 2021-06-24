@@ -1,4 +1,4 @@
-from math_dunders import math_dunders
+from math_dunders import math_dunders, unary, binary
 import unittest
 from math import ceil, floor, trunc
 
@@ -9,87 +9,113 @@ class r(float):  # Real number.
 
 
 class TestMathDunders(unittest.TestCase):
-    def assertTypes(self, a, b, a_type=r, b_type=None):
+    def check(self, a, b, a_type=r, b_type=None):
+        self.assertEqual(a, b)
         if a_type is not None:
             self.assertEqual(type(a), a_type)
         if b_type is not None:
             self.assertEqual(type(b), b_type)
 
-    def assertEq(self, a, b, a_type=r, b_type=None):
-        self.assertEqual(a, b)
-        self.assertTypes(a, b, a_type, b_type)
-
-    def assertNeq(self, a, b, a_type=r, b_type=None):
-        self.assertNotEqual(a, b)
-        self.assertTypes(a, b, a_type, b_type)
-
     # Miscellaneous Tests:
 
+    def test_lists(self):
+        u = ['__abs__', '__ceil__', '__floor__', '__neg__', '__pos__', '__round__', '__trunc__']
+        b = ['__add__', '__floordiv__', '__mod__', '__mul__', '__pow__', '__sub__', '__truediv__',
+             '__radd__', '__rfloordiv__', '__rmod__', '__rmul__', '__rpow__', '__rsub__', '__rtruediv__']
+        self.assertEqual(sorted(unary), sorted(u))
+        self.assertEqual(sorted(binary), sorted(b))
+
     def test_zero(self):
-        self.assertEq(r(), 0)
-        self.assertEq(r(), 0.0)
-        self.assertEq(r(), r())
-        self.assertEq(r(), r(0))
-        self.assertEq(r(), r(0.0))
-        self.assertEq(r(), r("0.0"))
+        self.check(r(), 0)
+        self.check(r(), 0.0)
+        self.check(r(), r())
+        self.check(r(), r(0))
+        self.check(r(), r(0.0))
+        self.check(r(), r("0.0"))
 
     def test_init(self):
-        self.assertEq(r(3.1), 3.1)
-        self.assertEq(r(-3.7), r(-3.7))
-        self.assertEq(r(3.0), r(3))
-        self.assertEq(r("3"), r(3))
-        self.assertEq(r(-3), -3)
+        self.check(r(3.1), 3.1)
+        self.check(r(-3.7), r(-3.7))
+        self.check(r(3.0), r(3))
+        self.check(r("3"), r(3))
+        self.check(r(-3), -3)
+        self.check(r(1092837675), 1092837675)
 
-        self.assertNeq(r(-1), r(1))
-        self.assertNeq(r(2), r(3))
+    def test_casts(self):
+        self.check(str(r(-64)), "-64.0", str)
+        self.check(int(r(-50)), -50, int)
+        self.check(float(r(9.8)), 9.8, float)
+        self.check(bool(r()), False, bool)
+        self.check(bool(r(1)), True, bool)
+        self.check(bool(r(0.00001)), True, bool)
 
     # Unary Dunder Tests:
 
     def test_abs(self):
-        self.assertEq(abs(r(0)), 0)
-        self.assertEq(abs(r(4)), 4)
-        self.assertEq(abs(r(-4)), 4)
+        self.check(abs(r(0)), 0)
+        self.check(abs(r(4)), 4)
+        self.check(abs(r(-4)), 4)
 
     def test_ceil(self):
-        raise NotImplementedError
+        self.check(ceil(r(1.5)), 2)
+        self.check(ceil(r(-1.5)), -1)
 
     def test_floor(self):
-        raise NotImplementedError
+        self.check(floor(r(1.5)), 1)
+        self.check(floor(r(-1.5)), -2)
 
     def test_neg(self):
-        raise NotImplementedError
+        self.check(-r(0), 0)
+        self.check(-r(4), -4)
+        self.check(-r(-4), 4)
 
     def test_pos(self):
-        raise NotImplementedError
+        self.check(+r(0), 0)
+        self.check(+r(4), 4)
+        self.check(+r(-4), -4)
 
     def test_round(self):
-        raise NotImplementedError
+        self.check(round(r(1.5)), 2)
+        self.check(round(r(-1.5)), -2)
+        self.check(round(r(2.5)), 2)
+        self.check(round(r(-2.5)), -2)
+        self.check(round(r(9.1)), 9)
+        self.check(round(r(-9.1)), -9)
+        self.check(round(r(9.9)), 10)
+        self.check(round(r(-9.9)), -10)
 
     def test_trunc(self):
-        raise NotImplementedError
+        self.check(trunc(r(1.5)), 1)
+        self.check(trunc(r(-1.5)), -1)
+        self.check(trunc(r(2.5)), 2)
+        self.check(trunc(r(-2.5)), -2)
+        self.check(trunc(r(9.1)), 9)
+        self.check(trunc(r(-9.1)), -9)
+        self.check(trunc(r(9.9)), 9)
+        self.check(trunc(r(-9.9)), -9)
 
-    # Binary Dunder Tests:
+    # Binary Dunder Tests: TODO
 
     def test_add(self):
-        raise NotImplementedError
+        pass
 
     def test_floordiv(self):
-        raise NotImplementedError
+        pass
 
     def test_mod(self):
-        raise NotImplementedError
+        pass
 
     def test_mul(self):
-        raise NotImplementedError
+        pass
 
     def test_pow(self):
-        raise NotImplementedError
+        pass
 
     def test_sub(self):
-        raise NotImplementedError
+        pass
 
     def test_truediv(self):
-        raise NotImplementedError
+        pass
 
 
 if __name__ == "__main__":
