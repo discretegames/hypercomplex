@@ -3,7 +3,7 @@ import unittest
 from math import ceil, floor, trunc
 
 
-@math_dunders(base=float)
+@math_dunders()
 class r(float):  # Real number.
     pass
 
