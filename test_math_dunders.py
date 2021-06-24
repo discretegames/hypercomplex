@@ -97,7 +97,7 @@ class TestMathDunders(unittest.TestCase):
     # Binary Dunder Tests: TODO
 
     def test_add(self):
-        pass
+        self.check(r(9) + 8, 17)
 
     def test_floordiv(self):
         pass
