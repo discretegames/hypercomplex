@@ -14,13 +14,41 @@ class Number:
     def __len__(self):
         return self.dimensions
 
+    @classmethod
+    # Creates a table akin to the one at wikipedia.org/wiki/Octonion#Definition.
+    def e_matrix(cls, table=True, raw=False, e="e"):
+        base = cls.base()
+        zero, one = base(), base(1)
+        args = [zero] * cls.dimensions
+        ees = []
+        for i in range(cls.dimensions):
+            args[i] = one
+            ees.append(cls(*args))
+            args[i] = zero
+
+        def format(cell):
+            if not raw:
+                i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
+                cell = f"{e}{i}"
+                if c < 0:
+                    cell = "-" + cell
+            return cell
+
+        matrix = [[format(i * j) for j in ees] for i in ees]
+
+        if table:
+            matrix = [[*map(str, row)] for row in matrix]
+            length = max(len(cell) for row in matrix for cell in row)
+            return '\n'.join(' '.join(cell.rjust(length) for cell in row)[1:] for row in matrix) + '\n'
+        return matrix
+
 
 def reals(base=float):
-    @math_dunders(base=base)
+    @ math_dunders(base=base)
     class Real(Number, base):
         dimensions = 1
 
-        @staticmethod
+        @ staticmethod
         def base():
             return base
 
@@ -32,6 +60,12 @@ def reals(base=float):
 
         def conj(self):
             return self.copy()
+
+        def __str__(self):
+            return f"{self:g}"
+
+        def __repr__(self):
+            return str(self)
 
     return Real
 
@@ -53,8 +87,6 @@ def cayley_dicksonize(basis):
                     args += (Hypercomplex.base()(),) * (len(self) - len(args))
                 self.a = basis(*args[:len(self)//2])
                 self.b = basis(*args[len(self)//2:])
-
-        # Core Methods:
 
         @ staticmethod
         def coerce(other):
@@ -165,23 +197,26 @@ def cayley_dicksonize(basis):
 
 
 def cayley_dickson_algebra(level, base=float):
-    if not isinstance(level, int) or level < 1:
+    if not isinstance(level, int) or level < 0:
         raise ValueError("The level must be a positive integer.")
     numbers = reals(base)
-    for _ in range(level - 1):
+    for _ in range(level):
         numbers = cayley_dicksonize(numbers)
     return numbers
 
 
-Real = reals()  # 1
-Complex = cayley_dicksonize(Real)  # 2
-Quaternion = cayley_dicksonize(Complex)  # 4
-Octonion = cayley_dicksonize(Quaternion)  # 8
-Sedenion = cayley_dicksonize(Octonion)  # 16
-Trigintaduonion = cayley_dicksonize(Sedenion)  # 32
-Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)  # 64
-Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)  # 128
-Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # 256
-
+Real = reals()                                                            # level 0 = 1 dimension
+Complex = cayley_dicksonize(Real)                                         # level 1 = 2 dimensions
+Quaternion = cayley_dicksonize(Complex)                                   # level 2 = 4 dimensions
+Octonion = cayley_dicksonize(Quaternion)                                  # level 3 = 8 dimensions
+Sedenion = cayley_dicksonize(Octonion)                                    # level 4 = 16 dimensions
+Trigintaduonion = cayley_dicksonize(Sedenion)                             # level 5 = 32 dimensions
+Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                 # level 6 = 64 dimensions
+Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
+Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
 
 # Todo e matrix
+print(Real.e_matrix())
+print(Complex.e_matrix())
+print(Quaternion.e_matrix())
+print(cayley_dickson_algebra(5).e_matrix(table=False, e=""))
