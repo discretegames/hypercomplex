@@ -18,11 +18,16 @@ class Number:
         return self.coefficients()[index]
 
     def __str__(self):
-        coefficients = [f"{c:g}" for c in self.coefficients()]
-        return "(" + ' '.join(coefficients) + ")"
+        return format(self)
 
     def __repr__(self):
         return f"{self.__class__.__name__}[{len(self)}]" + str(self)
+
+    def __format__(self, format_spec):
+        if not format_spec:
+            format_spec = "g"
+        coefficients = [f"{c:{format_spec}}" for c in self.coefficients()]
+        return "(" + ' '.join(coefficients) + ")"
 
     @classmethod
     def e(cls, index):
@@ -34,7 +39,7 @@ class Number:
     @classmethod
     # Creates a table akin to the one at wikipedia.org/wiki/Octonion#Definition.
     def e_matrix(cls, table=True, raw=False, e="e"):
-        def format(cell):
+        def format_cell(cell):
             if not raw:
                 i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
                 cell = f"{e}{i}"
@@ -43,7 +48,7 @@ class Number:
             return cell
 
         ees = list(map(cls.e, range(cls.dimensions)))
-        matrix = [[format(i * j) for j in ees] for i in ees]
+        matrix = [[format_cell(i * j) for j in ees] for i in ees]
 
         if table:
             matrix = [list(map(str, row)) for row in matrix]
@@ -71,9 +76,6 @@ def reals(base=float):
 
         def conj(self):
             return self.copy()
-
-        # def __format__(self, format_spec):
-        #     return super().__format__(format_spec)
 
     return Real
 
@@ -182,7 +184,7 @@ def cayley_dicksonize(basis):
 
         def __truediv__(self, other):
             base = Hypercomplex.base()
-            if type(other) is base:  # Short circuit base type to avoid infinite recursion in inverse().
+            if isinstance(other, base):  # Short circuit base type to avoid infinite recursion in inverse().
                 other = base(1) / other
             else:
                 other = Hypercomplex.coerce(other)
@@ -217,13 +219,61 @@ Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # leve
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
 
 
-for i in range(6):
-    print(cayley_dickson_algebra(i).e_matrix(raw=True))
+# http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
+e = Sedenion(Octonion(0), Octonion(1), pair=True)
+e2 = Sedenion(Octonion(1), Octonion(0), pair=True)
+p = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
+
+# print(p * e2 == p)
+# print(p * e)  # it works!
+
+print(Trigintaduonion.e_matrix())
+
+i = Sedenion.e(1)
+j = Sedenion.e(2)
+k = Sedenion.e(3)
+l = Sedenion.e(4)
+
+p = i*l + j*e
+q = j*l + i*e
+
+p = Quaternion(0, 1.234, 5, -6)
+
+# p = Real(900)
+
+print(p)
+print(str(p))
+print(repr(p))
+print(f"{p:0.05f}")
+print(format(p))
+exit()
+
+print(f'{e = !s}')
+print(f'{i = !s}')
+print(f'{j = !s}')
+# print(f'{k = !s}')6
+print(f'{l = !s}')
+print()
+
+print(f'{p = !s}')
+print(f'{q = !s}')
+print(f'{p*q = !s}')
+print(f'{1/p = !s}')
+print(f'{1/q = !s}')
+# print(f'{-2/p == p }')
+print(f'{(1/p)*(1/q) = !s}')
+
+# il = Sedenion.e(5)
+# il = Sedenion.e(9)
+# je = Sedenion.e()
+# jl = Sedenion.e()
+# ie = Sedenion.e()
+
 
 # TODO
 # test suite
 # method documentation
 # make and upload to pip package on PyPI
 # improve format
-# type hints
+# type hints?? bleh
 # some cool images? extra file
