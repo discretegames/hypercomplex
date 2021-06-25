@@ -48,7 +48,9 @@ class Number:
         if table:
             matrix = [list(map(str, row)) for row in matrix]
             length = max(len(cell) for row in matrix for cell in row)
-            return '\n'.join(' '.join(cell.rjust(length) for cell in row)[1:] for row in matrix) + '\n'
+            offset = length - max(len(row[0]) for row in matrix)
+            rows = [' '.join(cell.rjust(length) for cell in row)[offset:] for row in matrix]
+            return '\n'.join(rows) + '\n'
         return matrix
 
 
@@ -214,15 +216,9 @@ Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                 # leve
 Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
 
-s = Sedenion.e(8)
 
-r = Real.e(0)
-
-print(Sedenion.e_matrix())
-
-print(repr(s), s)
-# print(f"{Real(0):0.2f}")
-
+for i in range(6):
+    print(cayley_dickson_algebra(i).e_matrix(raw=True))
 
 # TODO
 # test suite
