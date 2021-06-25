@@ -124,6 +124,11 @@ def cayley_dicksonize(basis):
             return Hypercomplex(other) * self
 
         def __pow__(self, other):  # Only valid if other is an integer.
+            if not isinstance(other, int):
+                return NotImplemented
+            if other == 0:
+                return Hypercomplex(Hypercomplex.base()(1))
+
             pass  # Todo later
 
         def __sub__(self, other):
@@ -137,7 +142,7 @@ def cayley_dicksonize(basis):
 
         def __truediv__(self, other):
             base = Hypercomplex.base()
-            if type(other) is base:  # Short circuit base type to avoid infinite recursion in inverse.
+            if type(other) is base:  # Short circuit base type to avoid infinite recursion in inverse().
                 other = base(1) / other
             else:
                 other = Hypercomplex.coerce(other)
@@ -154,17 +159,20 @@ def cayley_dicksonize(basis):
 # Todo e matrix
 
 
-Real = reals()
-Complex = cayley_dicksonize(Real)
-Quaternion = cayley_dicksonize(Complex)
-Octonion = cayley_dicksonize(Quaternion)
-Sedenion = cayley_dicksonize(Octonion)
-Trigintaduonion = cayley_dicksonize(Sedenion)
+Real = reals()  # 1
+Complex = cayley_dicksonize(Real)  # 2
+Quaternion = cayley_dicksonize(Complex)  # 4
+Octonion = cayley_dicksonize(Quaternion)  # 8
+Sedenion = cayley_dicksonize(Octonion)  # 16
+Trigintaduonion = cayley_dicksonize(Sedenion)  # 32
+Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)  # 64
+Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)  # 128
+Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # 256
 
 q = Quaternion(1, 2, 3, 4)
 t = Trigintaduonion(q)
 
-print(q * t)
+print(t**0)
 
 # print(r.norm_squared())
 # print(type(r.norm_squared()))
