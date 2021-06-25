@@ -80,7 +80,8 @@ def cayley_dicksonize(basis):
         def __bool__(self):
             return bool(self.a) or bool(self.b)
 
-        def __eq__(self, other):
+        def __eq__(self, other):  # todo fix for different types
+
             return self.a == other.a and self.b == other.b
 
         def __str__(self):
@@ -159,6 +160,13 @@ def cayley_dicksonize(basis):
 # Todo e matrix
 
 
+def cayley_dickson_algebra(level, base=float):
+    numbers = reals(base)
+    for _ in range(level - 1):
+        numbers = cayley_dicksonize(numbers)
+    return numbers
+
+
 Real = reals()  # 1
 Complex = cayley_dicksonize(Real)  # 2
 Quaternion = cayley_dicksonize(Complex)  # 4
@@ -168,11 +176,20 @@ Trigintaduonion = cayley_dicksonize(Sedenion)  # 32
 Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)  # 64
 Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)  # 128
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # 256
+C = cayley_dickson_algebra(8)
+
+print(C(3) == Centumduodetrigintanions(3))
+
+c = Ducentiquinquagintasexions(2, 4)
+# print(CD512(2, 4) == Ducentiquinquagintasexions(2, 4))
+
+#c = CD512(3)
+#print(c == Ducentiquinquagintasexions(3))
+
 
 q = Quaternion(1, 2, 3, 4)
 t = Trigintaduonion(q)
 
-print(t**0)
 
 # print(r.norm_squared())
 # print(type(r.norm_squared()))
