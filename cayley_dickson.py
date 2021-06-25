@@ -214,9 +214,3 @@ Trigintaduonion = cayley_dicksonize(Sedenion)                             # leve
 Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                 # level 6 = 64 dimensions
 Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
-
-# Todo e matrix
-print(Real.e_matrix())
-print(Complex.e_matrix())
-print(Quaternion.e_matrix())
-print(cayley_dickson_algebra(5).e_matrix(table=False, e=""))
