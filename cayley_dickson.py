@@ -39,7 +39,7 @@ def reals(base=float):
 
 def cayley_dicksonize(basis):
     class Hypercomplex(Number):
-        dimensions = 2 * basis.dimensions  # TODO use dimensions for type casting?
+        dimensions = 2 * basis.dimensions
 
         # a is the "real" half. b is the "imaginary" half.
         def __init__(self, *args, pair=False):
@@ -118,15 +118,27 @@ def cayley_dicksonize(basis):
             return Hypercomplex(other) + self  # Should never raise TypeError.
 
         def __mul__(self, other):
+            other = Hypercomplex.coerce(other)
+            if other is None:
+                return NotImplemented
             a = self.a * other.a - other.b.conj() * self.b
             b = other.b * self.a + self.b * other.a.conj()
             return Hypercomplex(a, b, pair=True)
 
+        def __rmul__(self, other):
+            return Hypercomplex(other) * self
+
         def __pow__(self, other):  # Only valid if other is an integer.
-            pass  # todo
+            pass  # Todo later
 
         def __sub__(self, other):
+            other = Hypercomplex.coerce(other)
+            if other is None:
+                return NotImplemented
             return Hypercomplex(self.a - other.a, self.b - other.b, pair=True)
+
+        def __rsub__(self, other):
+            return Hypercomplex(other) - self
 
         def __truediv__(self, other):
             if not Number.is_hypercomplex(other):
@@ -143,7 +155,7 @@ def cayley_dicksonize(basis):
             print(other, 'OTH')
             pass
 
-        # TODO radd rmul rsub rtruediv
+        # TODO rtruediv
 
     return Hypercomplex
 
@@ -157,17 +169,27 @@ Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-c = Complex(100, 200)
+c = Complex(2, 3)
 q = Quaternion(1, 2, 3, 4)
-o = Octonion(1)
-print(q + c)
-print(c + q)
-print(q + 11.0)
-print(q + Real(11))
-print(Real(11) + q + 2 + Complex(Real(2), Real(3)))
-print(Complex(Real(2), Real(3)) + q + q)
-print(Quaternion(Real(3), Real(3), Real(3), Real(3)))
-print(o + 34)
+o = Octonion(-2)
+
+print(q - q)
+print(q - 9)
+print(q - Real(100))
+print(q - o)
+# print(o - q)
+# print(1-q)
+# print(-q)
+
+
+# print(q * c)
+# print(c * q)
+# print(q + 11.0)
+# print(q + Real(11))
+# print(Real(11) + q + 2 + Complex(Real(2), Real(3)))
+# print(Complex(Real(2), Real(3)) + q + q)
+# print(Quaternion(Real(3), Real(3), Real(3), Real(3)))
+# print(o + 34)
 # print(q)
 # print(Real(Real(9)))
 
