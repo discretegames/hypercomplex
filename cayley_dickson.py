@@ -12,6 +12,10 @@ class Number:
     def __len__(self):
         return self.dimensions
 
+    @staticmethod
+    def is_hypercomplex(obj):
+        return hasattr(obj, 'dimensions')
+
 
 def reals(base=float):
     @math_dunders(base=base)
@@ -28,6 +32,9 @@ def reals(base=float):
         def real(self):
             return base(self)  # todo should this be copy?
 
+        def inverse(self):
+            pass  # todo
+
         def conj(self):
             return self.copy()
 
@@ -42,11 +49,13 @@ def cayley_dicksonize(basis):
         def __init__(self, *args, pair=False):
             if pair:
                 self.a, self.b = map(basis, args)
-            elif len(args) == 1 and args[0].__class__ is Hypercomplex:
-                self.a, self.b = basis(args[0].a), basis(args[0].b)
             else:
-                base = self.base()
-                args += (base(),) * (len(self) - len(args))
+                if len(args) == 1 and Hypercomplex.is_hypercomplex(args[0]):
+                    args = args[0].coefficients()
+                if len(args) > len(self):
+                    raise TypeError(f"Too many args. Got {len(args)} expecting at most {len(self)}.")
+                if len(self) != len(args):
+                    args += (Hypercomplex.base()(),) * (len(self) - len(args))
                 self.a = basis(*args[:len(self)//2])
                 self.b = basis(*args[len(self)//2:])
 
@@ -55,6 +64,8 @@ def cayley_dicksonize(basis):
         @staticmethod
         def base():
             return basis.base()
+
+        # TODO Consider making real, coefficients, conj, inverse all properties
 
         def real(self):
             return self.a.real()
@@ -66,7 +77,7 @@ def cayley_dicksonize(basis):
             return Hypercomplex(self.a.conj(), -self.b, pair=True)
 
         def inverse(self):
-            return Hypercomplex(self.conj())  # TODO
+            return self.conj() / self.norm_squared()
 
         def __bool__(self):
             return bool(self.a) or bool(self.b)
@@ -95,7 +106,12 @@ def cayley_dicksonize(basis):
         # Binary Mathematical Dunders:
 
         def __add__(self, other):
+            if not Hypercomplex.is_hypercomplex(other):
+                pass  # todo
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
+
+        def __radd__(self, other):
+            pass
 
         def __mul__(self, other):
             a = self.a * other.a - other.b.conj() * self.b
@@ -109,11 +125,25 @@ def cayley_dicksonize(basis):
             return Hypercomplex(self.a - other.a, self.b - other.b, pair=True)
 
         def __truediv__(self, other):
-            return self * other.inverse()  # TODO?
+            if not Number.is_hypercomplex(other):
+                other = Hypercomplex(other)
+            elif len(other) > len(self):
+                return NotImplemented
+            return self * other.inverse()
+            if type(other) is Hypercomplex:
+                return self * other.inverse()  # TODO?
+            return Hypercomplex(self.a / other, self.b / other, pair=True)
+
+        def __rtruediv__(self, other):
+
+            print(other, 'OTH')
+            pass
 
         # TODO radd rmul rsub rtruediv
 
     return Hypercomplex
+
+# TODO test += methods
 
 
 Real = reals(float)
@@ -123,9 +153,14 @@ Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-r = Octonion(1, 2, 3, 5, -9.8)
-print(r.conj())
-print(r*r)
+c = Complex(9, 8)
+print(c)
+q = Quaternion(c)
+print(q)
+print(Real(Real(9)))
 
-print(r.norm_squared())
-print(type(Real().conj()))
+#r = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
+
+#s = Sedenion(r)
+# print(s)
+# print(r)
