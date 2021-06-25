@@ -7,10 +7,7 @@ class Number:
         return self.__class__(self)
 
     def norm_squared(self):
-        return self.conjugate() * self
-
-    def inverse(self):
-        pass  # todo
+        return self.conj() * self
 
     def __len__(self):
         return self.dimensions
@@ -28,7 +25,10 @@ def reals(base=float):
         def coefficients(self):
             return (base(self),)
 
-        def conjugate(self):
+        def real(self):
+            return base(self)  # todo should this be copy?
+
+        def conj(self):
             return self.copy()
 
     return Real
@@ -36,7 +36,7 @@ def reals(base=float):
 
 def cayley_dicksonize(basis):
     class Hypercomplex(Number):
-        dimensions = 2 * basis.dimensions  # TODO use dimensions for type casting
+        dimensions = 2 * basis.dimensions  # TODO use dimensions for type casting?
 
         # a is the "real" half. b is the "imaginary" half.
         def __init__(self, *args, pair=False):
@@ -56,11 +56,17 @@ def cayley_dicksonize(basis):
         def base():
             return basis.base()
 
+        def real(self):
+            return self.a.real()
+
         def coefficients(self):
             return self.a.coefficients() + self.b.coefficients()
 
-        def conjugate(self):
-            return Hypercomplex(self.a.conjugate(), -self.b, pair=True)
+        def conj(self):
+            return Hypercomplex(self.a.conj(), -self.b, pair=True)
+
+        def inverse(self):
+            return Hypercomplex(self.conj())  # TODO
 
         def __bool__(self):
             return bool(self.a) or bool(self.b)
@@ -92,15 +98,18 @@ def cayley_dicksonize(basis):
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
         def __mul__(self, other):
-            a = self.a * other.a - other.b.conjugate() * self.b
-            b = other.b * self.a + self.b * other.a.conjugate()
+            a = self.a * other.a - other.b.conj() * self.b
+            b = other.b * self.a + self.b * other.a.conj()
             return Hypercomplex(a, b, pair=True)
+
+        def __pow__(self, other):  # Only valid if other is an integer.
+            pass  # todo
 
         def __sub__(self, other):
             return Hypercomplex(self.a - other.a, self.b - other.b, pair=True)
 
         def __truediv__(self, other):
-            return self * other.inverse()  # TODO
+            return self * other.inverse()  # TODO?
 
         # TODO radd rmul rsub rtruediv
 
@@ -114,34 +123,9 @@ Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-r = Trigintaduonion(1, 2, 3)
-#r = Real(9)
-
-r2 = r.copy()
+r = Octonion(1, 2, 3, 5, -9.8)
+print(r.conj())
+print(r*r)
 
 print(r.norm_squared())
-# print(type(r.conjugate()))
-
-
-# x = Complex(2, 3)
-# print(x * x)
-
-# q = Quaternion(1, 2, 3, 4)
-# q2 = Quaternion(q)
-# print(q2 * q2)
-
-
-# r1 = Complex(8.344, -1)
-# r2 = r1.copy()
-# print(r1, r1 is r2)
-
-# print(Trigintaduonion.base())
-# q2 = q
-# print(q)
-# print(q is q2)
-# print(q + q)
-# print(Octonion())
-# o1 = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
-# print(bool(o1), bool(Octonion()))
-# o2 = Octonion(1, 1, 1, 1, 1, 1, 1, 1)
-# print(o1.conj)
+print(type(Real().conj()))
