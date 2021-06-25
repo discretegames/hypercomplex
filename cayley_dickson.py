@@ -14,18 +14,26 @@ class Number:
     def __len__(self):
         return self.dimensions
 
+    def __getitem__(self, index):
+        return self.coefficients()[index]
+
+    def __str__(self):
+        coefficients = [f"{c:g}" for c in self.coefficients()]
+        return "(" + ' '.join(coefficients) + ")"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}[{len(self)}]" + str(self)
+
+    @classmethod
+    def e(cls, index):
+        base = cls.base()
+        coefficients = [base()] * cls.dimensions
+        coefficients[index] = base(1)
+        return cls(*coefficients)
+
     @classmethod
     # Creates a table akin to the one at wikipedia.org/wiki/Octonion#Definition.
     def e_matrix(cls, table=True, raw=False, e="e"):
-        base = cls.base()
-        zero, one = base(), base(1)
-        args = [zero] * cls.dimensions
-        ees = []
-        for i in range(cls.dimensions):
-            args[i] = one
-            ees.append(cls(*args))
-            args[i] = zero
-
         def format(cell):
             if not raw:
                 i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
@@ -34,21 +42,22 @@ class Number:
                     cell = "-" + cell
             return cell
 
+        ees = list(map(cls.e, range(cls.dimensions)))
         matrix = [[format(i * j) for j in ees] for i in ees]
 
         if table:
-            matrix = [[*map(str, row)] for row in matrix]
+            matrix = [list(map(str, row)) for row in matrix]
             length = max(len(cell) for row in matrix for cell in row)
             return '\n'.join(' '.join(cell.rjust(length) for cell in row)[1:] for row in matrix) + '\n'
         return matrix
 
 
 def reals(base=float):
-    @ math_dunders(base=base)
+    @math_dunders(base=base)
     class Real(Number, base):
         dimensions = 1
 
-        @ staticmethod
+        @staticmethod
         def base():
             return base
 
@@ -61,11 +70,8 @@ def reals(base=float):
         def conj(self):
             return self.copy()
 
-        def __str__(self):
-            return f"{self:g}"
-
-        def __repr__(self):
-            return str(self)
+        # def __format__(self, format_spec):
+        #     return super().__format__(format_spec)
 
     return Real
 
@@ -88,14 +94,14 @@ def cayley_dicksonize(basis):
                 self.a = basis(*args[:len(self)//2])
                 self.b = basis(*args[len(self)//2:])
 
-        @ staticmethod
+        @staticmethod
         def coerce(other):
             try:
                 return Hypercomplex(other)
             except TypeError:
                 return None
 
-        @ staticmethod
+        @staticmethod
         def base():
             return basis.base()
 
@@ -118,13 +124,6 @@ def cayley_dicksonize(basis):
             else:
                 other = coerced
             return self.a == other.a and self.b == other.b
-
-        def __str__(self):
-            coefficients = [f"{c:g}" for c in self.coefficients()]
-            return "(" + ' '.join(coefficients) + ")"
-
-        def __repr__(self):
-            return f"{Hypercomplex.__name__}[{len(self)}]" + str(self)
 
         # Unary Math Dunders:
 
@@ -214,3 +213,21 @@ Trigintaduonion = cayley_dicksonize(Sedenion)                             # leve
 Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                 # level 6 = 64 dimensions
 Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
+
+s = Sedenion.e(8)
+
+r = Real.e(0)
+
+print(Sedenion.e_matrix())
+
+print(repr(s), s)
+# print(f"{Real(0):0.2f}")
+
+
+# TODO
+# test suite
+# method documentation
+# make and upload to pip package on PyPI
+# improve format
+# type hints
+# some cool images? extra file

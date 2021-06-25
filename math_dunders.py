@@ -23,3 +23,5 @@ def math_dunders(base: type = float) -> callable:
 
         return cls
     return decorator
+
+# todo use functools wraps?

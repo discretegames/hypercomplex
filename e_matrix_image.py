@@ -3,7 +3,7 @@ from PIL import Image
 from cayley_dickson import cayley_dickson_algebra
 
 scale = 10
-level = 6
+level = 5
 
 algebra = cayley_dickson_algebra(level)
 table = algebra.e_matrix(table=False, e="")
@@ -19,14 +19,14 @@ data = img.load()
 smallest = 2**(level - 1) - 1
 for x in range(img.width):
     for y in range(img.height):
-        val = array[y][x]
-        val *= 256 // (2**level)
+        val = array[y][x] + smallest
+        val *= 256 // (2**(level))
         r, g, b = 0, 0, 0
         if val >= 0:
             r = val
         else:
             b = -val
-        data[x, y] = r, g, b
+        data[x, y] = val, val, val
 
 img = img.resize((scale * img.width, scale * img.height), Image.NEAREST)
 img.save('out.png')
