@@ -58,6 +58,13 @@ def cayley_dicksonize(basis):
         # Core Methods:
 
         @staticmethod
+        def coerce(other):
+            try:
+                return Hypercomplex(other)
+            except TypeError:
+                return None
+
+        @staticmethod
         def base():
             return basis.base()
 
@@ -102,14 +109,13 @@ def cayley_dicksonize(basis):
         # Binary Mathematical Dunders:
 
         def __add__(self, other):
-            try:
-                other = Hypercomplex(other)
-            except TypeError:
+            other = Hypercomplex.coerce(other)
+            if other is None:
                 return NotImplemented
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
         def __radd__(self, other):
-            return self + Hypercomplex(other)  # Should never raise TypeError.
+            return Hypercomplex(other) + self  # Should never raise TypeError.
 
         def __mul__(self, other):
             a = self.a * other.a - other.b.conj() * self.b
@@ -151,7 +157,7 @@ Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-c = Complex(9, 5)
+c = Complex(100, 200)
 q = Quaternion(1, 2, 3, 4)
 o = Octonion(1)
 print(q + c)
@@ -159,8 +165,9 @@ print(c + q)
 print(q + 11.0)
 print(q + Real(11))
 print(Real(11) + q + 2 + Complex(Real(2), Real(3)))
-print(Complex(Real(2), Real(3)))
+print(Complex(Real(2), Real(3)) + q + q)
 print(Quaternion(Real(3), Real(3), Real(3), Real(3)))
+print(o + 34)
 # print(q)
 # print(Real(Real(9)))
 
