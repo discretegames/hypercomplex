@@ -12,10 +12,6 @@ class Number:
     def __len__(self):
         return self.dimensions
 
-    @staticmethod
-    def is_hypercomplex(obj):
-        return hasattr(obj, 'dimensions')
-
 
 def reals(base=float):
     @math_dunders(base=base)
@@ -50,7 +46,7 @@ def cayley_dicksonize(basis):
             if pair:
                 self.a, self.b = map(basis, args)
             else:
-                if len(args) == 1 and Hypercomplex.is_hypercomplex(args[0]):
+                if len(args) == 1 and hasattr(args[0], 'coefficients'):
                     args = args[0].coefficients()
                 if len(args) > len(self):
                     raise TypeError(f"Too many args. Got {len(args)} expecting at most {len(self)}.")
@@ -106,12 +102,14 @@ def cayley_dicksonize(basis):
         # Binary Mathematical Dunders:
 
         def __add__(self, other):
-            if not Hypercomplex.is_hypercomplex(other):
-                pass  # todo
+            try:
+                other = Hypercomplex(other)
+            except TypeError:
+                return NotImplemented
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
         def __radd__(self, other):
-            pass
+            return self + Hypercomplex(other)  # Should never raise TypeError.
 
         def __mul__(self, other):
             a = self.a * other.a - other.b.conj() * self.b
@@ -153,14 +151,21 @@ Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-c = Complex(9, 8)
-print(c)
-q = Quaternion(c)
-print(q)
-print(Real(Real(9)))
+c = Complex(9, 5)
+q = Quaternion(1, 2, 3, 4)
+o = Octonion(1)
+print(q + c)
+print(c + q)
+print(q + 11.0)
+print(q + Real(11))
+print(Real(11) + q + 2 + Complex(Real(2), Real(3)))
+print(Complex(Real(2), Real(3)))
+print(Quaternion(Real(3), Real(3), Real(3), Real(3)))
+# print(q)
+# print(Real(Real(9)))
 
-#r = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
+# r = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
 
-#s = Sedenion(r)
+# s = Sedenion(r)
 # print(s)
 # print(r)

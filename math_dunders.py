@@ -13,7 +13,8 @@ def math_dunders(base: type = float) -> callable:
     def decorator(cls):
         def make_dunder(name):  # Needed to encapsulate name.
             def dunder(self, *args):
-                return cls(getattr(base(self), name)(*args))
+                result = getattr(base(self), name)(*args)
+                return result if result is NotImplemented else cls(result)
             dunder.__name__ = name
             return dunder
 
