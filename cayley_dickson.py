@@ -130,10 +130,13 @@ def cayley_dicksonize(basis):
         def __pow__(self, other):  # Only valid if other is an integer.
             if not isinstance(other, int):
                 return NotImplemented
-            if other == 0:
-                return Hypercomplex(Hypercomplex.base()(1))
 
-            pass  # Todo later
+            value = Hypercomplex(Hypercomplex.base()(1))
+            if other:
+                multiplier = self if other > 0 else self.inverse()
+                for _ in range(abs(other)):
+                    value *= multiplier
+            return value
 
         def __sub__(self, other):
             other = Hypercomplex.coerce(other)
@@ -160,8 +163,6 @@ def cayley_dicksonize(basis):
 
     return Hypercomplex
 
-# Todo e matrix
-
 
 def cayley_dickson_algebra(level, base=float):
     if not isinstance(level, int) or level < 1:
@@ -183,59 +184,4 @@ Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)  # 128
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # 256
 
 
-q = Quaternion(99, 0)
-t = Ducentiquinquagintasexions(q)
-
-a = Ducentiquinquagintasexions(90)
-b = cayley_dickson_algebra(True)(90)
-
-print(a == b)
-
-print(99 == q == t)
-# print(q == 2)
-
-
-# print(r.norm_squared())
-# print(type(r.norm_squared()))
-
-# a = 2
-# b = 3
-# x = a + b * (1j)
-
-# c = Complex(2, 3)
-# q = Quaternion(1, 2, 3, 4)
-# o = Octonion(-2)
-
-# print(o)
-# o *= 200
-# print(o)
-
-# print(x/x)
-# print(c/c)
-
-
-# print(q - q)
-# print(q - 9)
-# print(q - Real(100))
-# print(q**2)
-# print(o - q)
-# print(1-q)
-# print(-q)
-
-
-# print(q * c)
-# print(c * q)
-# print(q + 11.0)
-# print(q + Real(11))
-# print(Real(11) + q + 2 + Complex(Real(2), Real(3)))
-# print(Complex(Real(2), Real(3)) + q + q)
-# print(Quaternion(Real(3), Real(3), Real(3), Real(3)))
-# print(o + 34)
-# print(q)
-# print(Real(Real(9)))
-
-# r = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
-
-# s = Sedenion(r)
-# print(s)
-# print(r)
+# Todo e matrix
