@@ -1,4 +1,3 @@
-from decimal import Decimal
 from math_dunders import math_dunders
 
 
@@ -80,8 +79,12 @@ def cayley_dicksonize(basis):
         def __bool__(self):
             return bool(self.a) or bool(self.b)
 
-        def __eq__(self, other):  # todo fix for different types
-
+        def __eq__(self, other):
+            coerced = Hypercomplex.coerce(other)
+            if coerced is None:
+                self = other.__class__.coerce(self)
+            else:
+                other = coerced
             return self.a == other.a and self.b == other.b
 
         def __str__(self):
@@ -161,6 +164,8 @@ def cayley_dicksonize(basis):
 
 
 def cayley_dickson_algebra(level, base=float):
+    if not isinstance(level, int) or level < 1:
+        raise ValueError("The level must be a positive integer.")
     numbers = reals(base)
     for _ in range(level - 1):
         numbers = cayley_dicksonize(numbers)
@@ -176,19 +181,18 @@ Trigintaduonion = cayley_dicksonize(Sedenion)  # 32
 Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)  # 64
 Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)  # 128
 Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # 256
-C = cayley_dickson_algebra(8)
-
-print(C(3) == Centumduodetrigintanions(3))
-
-c = Ducentiquinquagintasexions(2, 4)
-# print(CD512(2, 4) == Ducentiquinquagintasexions(2, 4))
-
-#c = CD512(3)
-#print(c == Ducentiquinquagintasexions(3))
 
 
-q = Quaternion(1, 2, 3, 4)
-t = Trigintaduonion(q)
+q = Quaternion(99, 0)
+t = Ducentiquinquagintasexions(q)
+
+a = Ducentiquinquagintasexions(90)
+b = cayley_dickson_algebra(True)(90)
+
+print(a == b)
+
+print(99 == q == t)
+# print(q == 2)
 
 
 # print(r.norm_squared())
