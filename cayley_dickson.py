@@ -6,8 +6,11 @@ class Number:
     def copy(self):
         return self.__class__(self)
 
-    def norm_squared(self):
-        return self.conj() * self
+    def norm_squared(self):  # Returns base type.
+        return (self.conj() * self).real_coefficient()
+
+    def inverse(self):
+        return self.conj() / self.norm_squared()
 
     def __len__(self):
         return self.dimensions
@@ -22,14 +25,11 @@ def reals(base=float):
         def base():
             return base
 
-        def coefficients(self):
-            return (base(self),)
+        def real_coefficient(self):  # Returns base type.
+            return base(self)
 
-        def real(self):
-            return base(self)  # todo should this be copy?
-
-        def inverse(self):
-            pass  # todo
+        def coefficients(self):  # Returns tuple of base type.
+            return (self.real_coefficient(),)
 
         def conj(self):
             return self.copy()
@@ -57,30 +57,25 @@ def cayley_dicksonize(basis):
 
         # Core Methods:
 
-        @staticmethod
+        @ staticmethod
         def coerce(other):
             try:
                 return Hypercomplex(other)
             except TypeError:
                 return None
 
-        @staticmethod
+        @ staticmethod
         def base():
             return basis.base()
 
-        # TODO Consider making real, coefficients, conj, inverse all properties
+        def real_coefficient(self):  # Returns base type.
+            return self.a.real_coefficient()
 
-        def real(self):
-            return self.a.real()
-
-        def coefficients(self):
+        def coefficients(self):  # Returns tuple of base type.
             return self.a.coefficients() + self.b.coefficients()
 
         def conj(self):
             return Hypercomplex(self.a.conj(), -self.b, pair=True)
-
-        def inverse(self):
-            return self.conj() / self.norm_squared()
 
         def __bool__(self):
             return bool(self.a) or bool(self.b)
@@ -95,18 +90,18 @@ def cayley_dicksonize(basis):
         def __repr__(self):
             return f"{Hypercomplex.__name__}[{len(self)}]" + str(self)
 
-        # Unary Mathematical Dunders:
+        # Unary Math Dunders:
 
-        def __abs__(self):
-            pass  # todo
+        def __abs__(self):  # Returns base type.
+            return self.norm_squared()**0.5
 
         def __neg__(self):
             return Hypercomplex(-self.a, -self.b, pair=True)
 
         def __pos__(self):
-            return self.copy()
+            return Hypercomplex(+self.a, +self.b, pair=True)
 
-        # Binary Mathematical Dunders:
+        # Binary Math Dunders:
 
         def __add__(self, other):
             other = Hypercomplex.coerce(other)
@@ -141,42 +136,59 @@ def cayley_dicksonize(basis):
             return Hypercomplex(other) - self
 
         def __truediv__(self, other):
-            if not Number.is_hypercomplex(other):
-                other = Hypercomplex(other)
-            elif len(other) > len(self):
-                return NotImplemented
-            return self * other.inverse()
-            if type(other) is Hypercomplex:
-                return self * other.inverse()  # TODO?
-            return Hypercomplex(self.a / other, self.b / other, pair=True)
+            base = Hypercomplex.base()
+            if type(other) is base:  # Short circuit base type to avoid infinite recursion in inverse.
+                other = base(1) / other
+            else:
+                other = Hypercomplex.coerce(other)
+                if other is None:
+                    return NotImplemented
+                other = other.inverse()
+            return self * other
 
         def __rtruediv__(self, other):
-
-            print(other, 'OTH')
-            pass
-
-        # TODO rtruediv
+            return Hypercomplex(other) / self
 
     return Hypercomplex
 
-# TODO test += methods
+# Todo e matrix
 
 
-Real = reals(float)
+Real = reals()
 Complex = cayley_dicksonize(Real)
 Quaternion = cayley_dicksonize(Complex)
 Octonion = cayley_dicksonize(Quaternion)
 Sedenion = cayley_dicksonize(Octonion)
 Trigintaduonion = cayley_dicksonize(Sedenion)
 
-c = Complex(2, 3)
 q = Quaternion(1, 2, 3, 4)
-o = Octonion(-2)
+t = Trigintaduonion(q)
 
-print(q - q)
-print(q - 9)
-print(q - Real(100))
-print(q - o)
+print(q * t)
+
+# print(r.norm_squared())
+# print(type(r.norm_squared()))
+
+# a = 2
+# b = 3
+# x = a + b * (1j)
+
+# c = Complex(2, 3)
+# q = Quaternion(1, 2, 3, 4)
+# o = Octonion(-2)
+
+# print(o)
+# o *= 200
+# print(o)
+
+# print(x/x)
+# print(c/c)
+
+
+# print(q - q)
+# print(q - 9)
+# print(q - Real(100))
+# print(q**2)
 # print(o - q)
 # print(1-q)
 # print(-q)
