@@ -60,7 +60,7 @@ class Number:
 
 
 def reals(base=float):
-    @math_dunders(base=base)
+    @math_dunders(b=base)
     class Real(Number, base):
         dimensions = 1
 
@@ -274,6 +274,4 @@ print(f'{(1/p)*(1/q) = !s}')
 # test suite
 # method documentation
 # make and upload to pip package on PyPI
-# improve format
-# type hints?? bleh
 # some cool images? extra file

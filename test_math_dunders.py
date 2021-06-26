@@ -1,11 +1,18 @@
+from typing import List
 from math_dunders import math_dunders, unary, binary
 import unittest
 from math import ceil, floor, trunc
 
 
 @math_dunders()
-class r(float):  # Real number.
-    pass
+class r(float):
+    """Represents a real number."""
+
+    def __radd__(self, other):
+        return 1234
+
+    def __sub__(self, other):
+        return 5678
 
 
 class TestMathDunders(unittest.TestCase):
@@ -20,14 +27,16 @@ class TestMathDunders(unittest.TestCase):
 
     def test_lists(self):
         u = ['__abs__', '__ceil__', '__floor__', '__neg__', '__pos__', '__round__', '__trunc__']
-        b = ['__add__', '__floordiv__', '__mod__', '__mul__', '__pow__', '__sub__', '__truediv__',
-             '__radd__', '__rfloordiv__', '__rmod__', '__rmul__', '__rpow__', '__rsub__', '__rtruediv__']
+        b = ['__add__', '__divmod__', '__floordiv__', '__mod__', '__mul__', '__pow__', '__sub__', '__truediv__',
+             '__radd__', '__rdivmod__', '__rfloordiv__', '__rmod__', '__rmul__', '__rpow__', '__rsub__', '__rtruediv__']
         self.assertEqual(sorted(unary), sorted(u))
         self.assertEqual(sorted(binary), sorted(b))
 
     def test_zero(self):
         self.check(r(), 0)
         self.check(r(), 0.0)
+        self.check(r(-0), 0)
+        self.check(r(-0.0), -0.0)
         self.check(r(), r())
         self.check(r(), r(0))
         self.check(r(), r(0.0))
@@ -40,9 +49,12 @@ class TestMathDunders(unittest.TestCase):
         self.check(r("3"), r(3))
         self.check(r(-3), -3)
         self.check(r(1092837675), 1092837675)
+        self.check(r(-0.00000017), -0.00000017)
+        self.check(r(34e-19), 34e-19)
 
     def test_casts(self):
         self.check(str(r(-64)), "-64.0", str)
+        self.check(f"{r(5):.03f}", "5.000", str)
         self.check(int(r(-50)), -50, int)
         self.check(float(r(9.8)), 9.8, float)
         self.check(bool(r()), False, bool)
@@ -99,7 +111,16 @@ class TestMathDunders(unittest.TestCase):
     # Binary Dunder Tests: TODO
 
     def test_add(self):
-        self.check(r(9) + 8, 17)
+        self.check(r(0) + 0, 0)
+        self.check(r(0) + r(0), 0)
+        self.check(r(1) + 1, 2)
+        self.check(r(1) + 1.0, 2)
+        self.check(r(1) + r(1), 7)
+        # self.check(1 + r(1), 2, float)
+        # self.check(r(1).__radd__(9), 10, float)
+
+    def test_divmod(self):
+        pass
 
     def test_floordiv(self):
         pass
@@ -120,8 +141,18 @@ class TestMathDunders(unittest.TestCase):
         pass
 
 
-if __name__ == "__main__":
+def test():
     try:
         unittest.main()
-    except SystemExit:
+    except SystemExit:  # So debugger doesn't pause.
         pass
+
+
+if __name__ == "__main__":
+    print(8 + r())
+
+    # test()
+
+
+# todo test force
+# todo test when base is given
