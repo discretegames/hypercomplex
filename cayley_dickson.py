@@ -1,4 +1,4 @@
-from math_dunders import math_dunders
+from ..mathdunders.mathdunders import mathdunders
 
 
 class Number:
@@ -60,7 +60,7 @@ class Number:
 
 
 def reals(base=float):
-    @math_dunders(b=base)
+    @mathdunders(base=base)
     class Real(Number, base):
         dimensions = 1
 
