@@ -1,7 +1,5 @@
 from mathdunders import dunders, mathdunders
 
-print(dunders)
-
 
 class Number:
     def copy(self):
@@ -82,7 +80,7 @@ def reals(base=float):
     return Real
 
 
-def cayley_dicksonize(basis):
+def cayley_dickson_construction(basis):
     class Hypercomplex(Number):
         dimensions = 2 * basis.dimensions
 
@@ -206,19 +204,23 @@ def cayley_dickson_algebra(level, base=float):
         raise ValueError("The level must be a positive integer.")
     numbers = reals(base)
     for _ in range(level):
-        numbers = cayley_dicksonize(numbers)
+        numbers = cayley_dickson_construction(numbers)
     return numbers
 
 
-CD1 = Real = reals()                                                              # level 0 = 1 dimension
-CD2 = Complex = cayley_dicksonize(Real)                                           # level 1 = 2 dimensions
-CD4 = Quaternion = cayley_dicksonize(Complex)                                     # level 2 = 4 dimensions
-CD8 = Octonion = cayley_dicksonize(Quaternion)                                    # level 3 = 8 dimensions
-CD16 = Sedenion = cayley_dicksonize(Octonion)                                     # level 4 = 16 dimensions
-CD32 = Trigintaduonion = cayley_dicksonize(Sedenion)                              # level 5 = 32 dimensions
-CD64 = Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                  # level 6 = 64 dimensions
-CD128 = Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
-CD256 = Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
+cd_construction = cayley_dickson_construction
+cd_algebra = cayley_dickson_algebra
+
+# Named based on https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
+R = Real = CD1 = reals()                               # level 0 -> 1 dimension
+C = Complex = CD2 = cayley_dickson_construction(R)     # level 1 -> 2 dimensions
+Q = Quaternion = CD4 = cayley_dickson_construction(C)  # level 2 -> 4 dimensions
+O = Octonion = CD8 = cayley_dickson_construction(Q)    # level 3 -> 8 dimensions
+S = Sedenion = CD16 = cayley_dickson_construction(O)   # level 4 -> 16 dimensions
+P = Pathion = CD32 = cayley_dickson_construction(S)    # level 5 -> 32 dimensions
+X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimensions
+U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
+V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
 
 
 # # http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
@@ -277,7 +279,6 @@ CD256 = Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)
 # handle complex nums nicely, use real part of others
 # test suite
 # method documentation
-# make and upload to pip package on PyPI
-# some cool images? extra file
 # tox?
-# more spelling words
+# .real and .imag ? rename conjugate
+# check for and descend from import numbers ... isinstance(x, Number)?
