@@ -1,3 +1,4 @@
+import decimal
 from mathdunders import mathdunders
 from numbers import Number
 from math import sqrt
@@ -102,10 +103,13 @@ def reals(base=float):
 
 def cayley_dickson_construction(basis):
     """DOCSTRING TODO"""
+    if not issubclass(basis, Number):
+        raise ValueError("The basis type must be derived from numbers.Number.")
+
     class Hypercomplex(Numeric):
         dimensions = 2 * basis.dimensions
 
-        # a is the "real" half. b is the "imaginary" half.
+        # a is the "real" left half. b is the "imaginary" right half.
         def __init__(self, *args, pair=False):
             if pair:
                 self.a, self.b = map(basis, args)
@@ -133,6 +137,16 @@ def cayley_dickson_construction(basis):
         def base():
             return basis.base()
 
+        @property
+        def real(self):
+            return self.real_coefficient()
+
+        @property
+        def imag(self):
+            if len(self) == 2:
+                return Hypercomplex.base()(self.b)
+            return self.a.imag
+
         def real_coefficient(self):  # Returns base type.
             return self.a.real_coefficient()
 
@@ -156,7 +170,8 @@ def cayley_dickson_construction(basis):
 
         def __complex__(self):
             if len(self) == 2:
-                return basis(self.a) + 1j * basis(self.b)
+                base = Hypercomplex.base()
+                return base(self.a) + 1j * base(self.b)
             raise TypeError(f"Can't convert {self.__class__.__name__} to complex.")
 
         def __eq__(self, other):
@@ -166,14 +181,6 @@ def cayley_dickson_construction(basis):
             else:
                 other = coerced
             return self.a == other.a and self.b == other.b
-
-        @property
-        def real(self):
-            return self.a
-
-        @property
-        def imag(self):
-            return self.b
 
         # Unary Math Dunders:
 
@@ -256,7 +263,7 @@ cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
 # Named based on https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
-R = Real = CD1 = reals()                               # level 0 -> 1 dimension
+R = Real = CD1 = reals(float)                               # level 0 -> 1 dimension
 C = Complex = CD2 = cayley_dickson_construction(R)     # level 1 -> 2 dimensions
 Q = Quaternion = CD4 = cayley_dickson_construction(C)  # level 2 -> 4 dimensions
 O = Octonion = CD8 = cayley_dickson_construction(Q)    # level 3 -> 8 dimensions
@@ -266,16 +273,19 @@ X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimension
 U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
 V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
 
-r = R(9)
+exit()
+r = C(9, 88676)
+print(2j * r)
 
 print(r.real, r.imag)
+print(type(r.real), type(r.imag))
 
-print(C(1+2j).conjugate() == (1+2j).conjugate())
+c = complex(C(4+8j))
+print(c, type(c))
 
-print(r)
-c = C(4+8j)
-print(c.real, c.imag)
-exit()
+
+#print(C(1+2j).conjugate() == (1+2j).conjugate())
+
 print(type(r.norm()))
 print(type(abs(r)))
 c = C(-3, 4)
