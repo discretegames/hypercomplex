@@ -7,11 +7,17 @@ class Numeric(Number):
     def copy(self):
         return self.__class__(self)
 
-    def norm_squared(self):  # Returns base type.
-        return (self.conj() * self).real_coefficient()
-
     def inverse(self):
-        return self.conj() / self.norm_squared()
+        return self.conjugate() / self.norm_squared()
+
+    def norm_squared(self):  # Returns base type.
+        return (self.conjugate() * self).real_coefficient()
+
+    def norm(self):  # Returns base type.
+        return sqrt(self.norm_squared())
+
+    def __abs__(self):  # Returns base type.
+        return self.norm()
 
     def __len__(self):
         return self.dimensions
@@ -85,7 +91,7 @@ def reals(base=float):
         def coefficients(self):  # Returns tuple of base type.
             return (self.real_coefficient(),)
 
-        def conj(self):  # TODO rename to conjugate?
+        def conjugate(self):
             return self.copy()
 
         def __hash__(self):
@@ -104,8 +110,11 @@ def cayley_dickson_construction(basis):
             if pair:
                 self.a, self.b = map(basis, args)
             else:
-                if len(args) == 1 and hasattr(args[0], 'coefficients'):
-                    args = args[0].coefficients()
+                if len(args) == 1:
+                    if hasattr(args[0], 'coefficients'):
+                        args = args[0].coefficients()
+                    elif isinstance(args[0], complex):
+                        args = args[0].real, args[0].imag
                 if len(args) > len(self):
                     raise TypeError(f"Too many args. Got {len(args)} expecting at most {len(self)}.")
                 if len(self) != len(args):
@@ -130,14 +139,25 @@ def cayley_dickson_construction(basis):
         def coefficients(self):  # Returns tuple of base type.
             return self.a.coefficients() + self.b.coefficients()
 
-        def conj(self):
-            return Hypercomplex(self.a.conj(), -self.b, pair=True)
+        def conjugate(self):
+            return Hypercomplex(self.a.conjugate(), -self.b, pair=True)
 
         def __hash__(self):
             return hash(self.coefficients())
 
         def __bool__(self):
             return bool(self.a) or bool(self.b)
+
+        def __int__(self):
+            raise TypeError(f"Can't convert {self.__class__.__name__} to int.")
+
+        def __float__(self):
+            raise TypeError(f"Can't convert {self.__class__.__name__} to float.")
+
+        def __complex__(self):
+            if len(self) == 2:
+                return basis(self.a) + 1j * basis(self.b)
+            raise TypeError(f"Can't convert {self.__class__.__name__} to complex.")
 
         def __eq__(self, other):
             coerced = Hypercomplex.coerce(other)
@@ -147,10 +167,15 @@ def cayley_dickson_construction(basis):
                 other = coerced
             return self.a == other.a and self.b == other.b
 
-        # Unary Math Dunders:
+        @property
+        def real(self):
+            return self.a
 
-        def __abs__(self):  # Returns base type.
-            return sqrt(self.norm_squared())
+        @property
+        def imag(self):
+            return self.b
+
+        # Unary Math Dunders:
 
         def __neg__(self):
             return Hypercomplex(-self.a, -self.b, pair=True)
@@ -167,14 +192,14 @@ def cayley_dickson_construction(basis):
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
         def __radd__(self, other):
-            return Hypercomplex(other) + self  # Should never raise TypeError.
+            return Hypercomplex(other) + self  # Should never encounter a TypeError.
 
         def __mul__(self, other):
             other = Hypercomplex.coerce(other)
             if other is None:
                 return NotImplemented
-            a = self.a * other.a - other.b.conj() * self.b
-            b = other.b * self.a + self.b * other.a.conj()
+            a = self.a * other.a - other.b.conjugate() * self.b
+            b = other.b * self.a + self.b * other.a.conjugate()
             return Hypercomplex(a, b, pair=True)
 
         def __rmul__(self, other):
@@ -241,15 +266,44 @@ X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimension
 U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
 V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
 
+r = R(9)
+
+print(r.real, r.imag)
+
+print(C(1+2j).conjugate() == (1+2j).conjugate())
+
+print(r)
+c = C(4+8j)
+print(c.real, c.imag)
+exit()
+print(type(r.norm()))
+print(type(abs(r)))
+c = C(-3, 4)
+
+print(type(c.norm()))
+print(type(abs(c)))
+
 q = Q(1, 2, 3, 4)
 
-r = R(7)
+
+# print(complex(q))  # == 1+7j == r)
+# print(1+7j)
+
+#print(int(r), float(r), complex(r), Decimal(r), bool(r))
+
+print(complex(c))
+print(float(c))
+
+print(complex(q))
+print(float(q))
+print(4.5+6j == c)
+
 # print(5 in q)
 # d = {r: 6}
 # print(d)
 
-print(hash(r), hash((99, 0)))
-print(hash(q))
+# print(hash(r), hash((99, 0)))
+# print(hash(q))
 
 # # http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
 # e = Sedenion(Octonion(0), Octonion(1), pair=True)
