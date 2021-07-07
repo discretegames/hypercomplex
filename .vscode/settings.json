@@ -1,12 +1,13 @@
 {
 	"cSpell.words": [
-		"hypercomplex",
-		"quaternion",
-		"octonion",
-		"sedenion",
-		"pathion",
 		"chingon",
+		"hypercomplex",
+		"imag",
+		"octonion",
+		"pathion",
+		"quaternion",
 		"routon",
+		"sedenion",
 		"voudon"
 	],
 	"python.pythonPath": "C:\\Users\\r\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"

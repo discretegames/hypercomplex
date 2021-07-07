@@ -1,7 +1,7 @@
 from os import path
 from setuptools import setup
 
-version = "0.1.1"
+version = "0.1.2"
 
 directory = path.abspath(path.dirname(__file__))
 with open(path.join(directory, 'README.md'), encoding='utf-8') as file:
@@ -17,7 +17,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/discretegames/hypercomplex',
     packages=['hypercomplex'],
-    install_requires=['mathdunders'],  # TODO > 0.4.0
+    install_requires=['mathdunders'],  # TODO > 1.0.0
     license="MIT",
     keywords=['python', 'math', 'complex', 'number', 'hypercomplex', 'Cayley',
               'Dickson', 'construction', 'algebra', 'quaternion', 'octonion', 'sedenion']
