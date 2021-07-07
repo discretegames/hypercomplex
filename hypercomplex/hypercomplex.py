@@ -103,8 +103,8 @@ def reals(base=float):
 
 def cayley_dickson_construction(basis):
     """DOCSTRING TODO"""
-    if not issubclass(basis, Number):
-        raise ValueError("The basis type must be derived from numbers.Number.")
+    if not hasattr(basis, 'coefficients'):
+        raise ValueError("The basis type must be Real or Hypercomplex. (No coefficients found.)")
 
     class Hypercomplex(Numeric):
         dimensions = 2 * basis.dimensions
@@ -263,7 +263,7 @@ cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
 # Named based on https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
-R = Real = CD1 = reals(float)                               # level 0 -> 1 dimension
+R = Real = CD1 = reals()                               # level 0 -> 1 dimension
 C = Complex = CD2 = cayley_dickson_construction(R)     # level 1 -> 2 dimensions
 Q = Quaternion = CD4 = cayley_dickson_construction(C)  # level 2 -> 4 dimensions
 O = Octonion = CD8 = cayley_dickson_construction(Q)    # level 3 -> 8 dimensions
@@ -272,6 +272,9 @@ P = Pathion = CD32 = cayley_dickson_construction(S)    # level 5 -> 32 dimension
 X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimensions
 U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
 V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
+
+# X = reals(int)
+# Y = cayley_dickson_construction(float)
 
 exit()
 r = C(9, 88676)
@@ -284,7 +287,7 @@ c = complex(C(4+8j))
 print(c, type(c))
 
 
-#print(C(1+2j).conjugate() == (1+2j).conjugate())
+# print(C(1+2j).conjugate() == (1+2j).conjugate())
 
 print(type(r.norm()))
 print(type(abs(r)))
@@ -299,7 +302,7 @@ q = Q(1, 2, 3, 4)
 # print(complex(q))  # == 1+7j == r)
 # print(1+7j)
 
-#print(int(r), float(r), complex(r), Decimal(r), bool(r))
+# print(int(r), float(r), complex(r), Decimal(r), bool(r))
 
 print(complex(c))
 print(float(c))
