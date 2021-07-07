@@ -1,3 +1,7 @@
+MANIFEST
 desktop.ini
 tempCodeRunnerFile.py
 __pycache__/
+hypercomplex.egg-info/
+dist/
+build/

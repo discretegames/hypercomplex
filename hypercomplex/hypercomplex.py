@@ -1,4 +1,6 @@
-from ..mathdunders.mathdunders import mathdunders
+from mathdunders import dunders, mathdunders
+
+print(dunders)
 
 
 class Number:
@@ -208,70 +210,74 @@ def cayley_dickson_algebra(level, base=float):
     return numbers
 
 
-Real = reals()                                                            # level 0 = 1 dimension
-Complex = cayley_dicksonize(Real)                                         # level 1 = 2 dimensions
-Quaternion = cayley_dicksonize(Complex)                                   # level 2 = 4 dimensions
-Octonion = cayley_dicksonize(Quaternion)                                  # level 3 = 8 dimensions
-Sedenion = cayley_dicksonize(Octonion)                                    # level 4 = 16 dimensions
-Trigintaduonion = cayley_dicksonize(Sedenion)                             # level 5 = 32 dimensions
-Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                 # level 6 = 64 dimensions
-Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
-Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
+CD1 = Real = reals()                                                              # level 0 = 1 dimension
+CD2 = Complex = cayley_dicksonize(Real)                                           # level 1 = 2 dimensions
+CD4 = Quaternion = cayley_dicksonize(Complex)                                     # level 2 = 4 dimensions
+CD8 = Octonion = cayley_dicksonize(Quaternion)                                    # level 3 = 8 dimensions
+CD16 = Sedenion = cayley_dicksonize(Octonion)                                     # level 4 = 16 dimensions
+CD32 = Trigintaduonion = cayley_dicksonize(Sedenion)                              # level 5 = 32 dimensions
+CD64 = Sexagintaquatronions = cayley_dicksonize(Trigintaduonion)                  # level 6 = 64 dimensions
+CD128 = Centumduodetrigintanions = cayley_dicksonize(Sexagintaquatronions)        # level 7 = 128 dimensions
+CD256 = Ducentiquinquagintasexions = cayley_dicksonize(Centumduodetrigintanions)  # level 8 = 256 dimensions
 
 
-# http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
-e = Sedenion(Octonion(0), Octonion(1), pair=True)
-e2 = Sedenion(Octonion(1), Octonion(0), pair=True)
-p = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
+# # http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
+# e = Sedenion(Octonion(0), Octonion(1), pair=True)
+# e2 = Sedenion(Octonion(1), Octonion(0), pair=True)
+# p = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
 
-# print(p * e2 == p)
-# print(p * e)  # it works!
+# # print(p * e2 == p)
+# # print(p * e)  # it works!
 
-print(Trigintaduonion.e_matrix())
+# # print(Trigintaduonion.e_matrix())
 
-i = Sedenion.e(1)
-j = Sedenion.e(2)
-k = Sedenion.e(3)
-l = Sedenion.e(4)
+# i = Sedenion.e(1)
+# j = Sedenion.e(2)
+# k = Sedenion.e(3)
+# l = Sedenion.e(4)
 
-p = i*l + j*e
-q = j*l + i*e
+# p = i*l + j*e
+# q = j*l + i*e
 
-p = Quaternion(0, 1.234, 5, -6)
+# p = Quaternion(0, 1.234, 5, -6)
 
-# p = Real(900)
+# # p = Real(900)
 
-print(p)
-print(str(p))
-print(repr(p))
-print(f"{p:0.05f}")
-print(format(p))
-exit()
+# print(p)
+# print(str(p))
+# print(repr(p))
+# print(f"{p:0.05f}")
+# print(format(p))
+# exit()
 
-print(f'{e = !s}')
-print(f'{i = !s}')
-print(f'{j = !s}')
-# print(f'{k = !s}')6
-print(f'{l = !s}')
-print()
+# print(f'{e = !s}')
+# print(f'{i = !s}')
+# print(f'{j = !s}')
+# # print(f'{k = !s}')6
+# print(f'{l = !s}')
+# print()
 
-print(f'{p = !s}')
-print(f'{q = !s}')
-print(f'{p*q = !s}')
-print(f'{1/p = !s}')
-print(f'{1/q = !s}')
-# print(f'{-2/p == p }')
-print(f'{(1/p)*(1/q) = !s}')
+# print(f'{p = !s}')
+# print(f'{q = !s}')
+# print(f'{p*q = !s}')
+# print(f'{1/p = !s}')
+# print(f'{1/q = !s}')
+# # print(f'{-2/p == p }')
+# print(f'{(1/p)*(1/q) = !s}')
 
-# il = Sedenion.e(5)
-# il = Sedenion.e(9)
-# je = Sedenion.e()
-# jl = Sedenion.e()
-# ie = Sedenion.e()
+# # il = Sedenion.e(5)
+# # il = Sedenion.e(9)
+# # je = Sedenion.e()
+# # jl = Sedenion.e()
+# # ie = Sedenion.e()
 
 
 # TODO
+# contains
+# handle complex nums nicely, use real part of others
 # test suite
 # method documentation
 # make and upload to pip package on PyPI
 # some cool images? extra file
+# tox?
+# more spelling words
