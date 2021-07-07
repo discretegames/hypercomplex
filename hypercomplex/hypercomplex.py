@@ -1,7 +1,9 @@
-from mathdunders import dunders, mathdunders
+from mathdunders import mathdunders
+from numbers import Number
+from math import sqrt
 
 
-class Number:
+class Numeric(Number):
     def copy(self):
         return self.__class__(self)
 
@@ -17,6 +19,9 @@ class Number:
     def __getitem__(self, index):
         return self.coefficients()[index]
 
+    def __contains__(self, obj):
+        return obj in self.coefficients()
+
     def __str__(self):
         return format(self)
 
@@ -31,6 +36,7 @@ class Number:
 
     @classmethod
     def e(cls, index):
+        """TODO"""
         base = cls.base()
         coefficients = [base()] * cls.dimensions
         coefficients[index] = base(1)
@@ -39,6 +45,7 @@ class Number:
     @classmethod
     # Creates a table akin to the one at wikipedia.org/wiki/Octonion#Definition.
     def e_matrix(cls, table=True, raw=False, e="e"):
+        """TODO"""
         def format_cell(cell):
             if not raw:
                 i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
@@ -60,8 +67,12 @@ class Number:
 
 
 def reals(base=float):
+    """TODO"""
+    if not issubclass(base, Number):
+        raise ValueError("The base type must be derived from numbers.Number.")
+
     @mathdunders(base=base)
-    class Real(Number, base):
+    class Real(Numeric, base):
         dimensions = 1
 
         @staticmethod
@@ -74,14 +85,18 @@ def reals(base=float):
         def coefficients(self):  # Returns tuple of base type.
             return (self.real_coefficient(),)
 
-        def conj(self):
+        def conj(self):  # TODO rename to conjugate?
             return self.copy()
+
+        def __hash__(self):
+            return hash(base(self))
 
     return Real
 
 
 def cayley_dickson_construction(basis):
-    class Hypercomplex(Number):
+    """DOCSTRING TODO"""
+    class Hypercomplex(Numeric):
         dimensions = 2 * basis.dimensions
 
         # a is the "real" half. b is the "imaginary" half.
@@ -118,6 +133,9 @@ def cayley_dickson_construction(basis):
         def conj(self):
             return Hypercomplex(self.a.conj(), -self.b, pair=True)
 
+        def __hash__(self):
+            return hash(self.coefficients())
+
         def __bool__(self):
             return bool(self.a) or bool(self.b)
 
@@ -132,7 +150,7 @@ def cayley_dickson_construction(basis):
         # Unary Math Dunders:
 
         def __abs__(self):  # Returns base type.
-            return self.norm_squared()**0.5
+            return sqrt(self.norm_squared())
 
         def __neg__(self):
             return Hypercomplex(-self.a, -self.b, pair=True)
@@ -200,6 +218,7 @@ def cayley_dickson_construction(basis):
 
 
 def cayley_dickson_algebra(level, base=float):
+    """TODO"""
     if not isinstance(level, int) or level < 0:
         raise ValueError("The level must be a positive integer.")
     numbers = reals(base)
@@ -222,6 +241,15 @@ X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimension
 U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
 V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
 
+q = Q(1, 2, 3, 4)
+
+r = R(7)
+# print(5 in q)
+# d = {r: 6}
+# print(d)
+
+print(hash(r), hash((99, 0)))
+print(hash(q))
 
 # # http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
 # e = Sedenion(Octonion(0), Octonion(1), pair=True)
@@ -280,5 +308,6 @@ V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensio
 # test suite
 # method documentation
 # tox?
-# .real and .imag ? rename conjugate
+# .real and .imag ? rename conjugate, also norm
+# __hash
 # check for and descend from import numbers ... isinstance(x, Number)?
