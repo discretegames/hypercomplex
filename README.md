@@ -1,3 +1,3 @@
 # Hypercomplex Python Math
 
-TODO
+TODO - write readme

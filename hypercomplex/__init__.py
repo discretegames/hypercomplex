@@ -1,5 +1,4 @@
-# TODO
-
+"""This package provides a way to work with hypercomplex number algebras following the Cayley-Dickson construction."""
 
 __all__ = """
 reals

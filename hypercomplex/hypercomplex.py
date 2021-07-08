@@ -1,20 +1,23 @@
-import decimal
+"""Provides the types and tools to create arbitrary-dimension hypercomplex numbers following the Cayley-Dickson construction."""
+
 from mathdunders import mathdunders
 from numbers import Number
 from math import sqrt
 
 
 class Numeric(Number):
-    def copy(self):
-        return self.__class__(self)
+    """A parent class for Real and Hypercomplex for shared behaviors."""
 
     def inverse(self):
+        """Returns the multiplicative inverse of the number."""
         return self.conjugate() / self.norm_squared()
 
     def norm_squared(self):  # Returns base type.
+        """Returns the square of the norm of the number as the base type."""
         return (self.conjugate() * self).real_coefficient()
 
     def norm(self):  # Returns base type.
+        """Returns the norm of the number as the base type."""
         return sqrt(self.norm_squared())
 
     def __abs__(self):  # Returns base type.
@@ -43,16 +46,15 @@ class Numeric(Number):
 
     @classmethod
     def e(cls, index):
-        """TODO"""
+        """Returns the unit hypercomplex number at the given subscript index."""
         base = cls.base()
         coefficients = [base()] * cls.dimensions
         coefficients[index] = base(1)
         return cls(*coefficients)
 
     @classmethod
-    # Creates a table akin to the one at wikipedia.org/wiki/Octonion#Definition.
     def e_matrix(cls, table=True, raw=False, e="e"):
-        """TODO"""
+        """Creates a table of e(i)*e(j)'s akin to the ones found e.g. at wikipedia.org/wiki/Octonion."""
         def format_cell(cell):
             if not raw:
                 i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
@@ -74,45 +76,50 @@ class Numeric(Number):
 
 
 def reals(base=float):
-    """TODO"""
+    """Creates a type that represents real numbers based on a numeric type base."""
     if not issubclass(base, Number):
         raise ValueError("The base type must be derived from numbers.Number.")
 
     @mathdunders(base=base)
     class Real(Numeric, base):
+        """A class that represents a real number, level 0 of the Cayley-Dickson construction."""
         dimensions = 1
 
         @staticmethod
         def base():
+            """Returns the base type these numbers were based on."""
             return base
 
         def real_coefficient(self):  # Returns base type.
+            """Returns the real (leftmost) coefficient of the hypercomplex number as the base type."""
             return base(self)
 
-        def coefficients(self):  # Returns tuple of base type.
+        def coefficients(self):  # Returns tuple of base types.
+            """Returns a tuple of base types of all the coefficients of the hypercomplex number."""
             return (self.real_coefficient(),)
 
         def conjugate(self):
-            return self.copy()
+            """Returns the conjugate of the hypercomplex number."""
+            return Real(self)
 
-        def __hash__(self):
+        def __hash__(self):  # For simplicity, use the base's hash rather than hash of coefficients tuple.
             return hash(base(self))
 
     return Real
 
 
 def cayley_dickson_construction(basis):
-    """DOCSTRING TODO"""
+    """Creates a type for the Cayley-Dickson algebra with twice the dimensions of the given Hypercomplex or Real basis."""
     if not hasattr(basis, 'coefficients'):
         raise ValueError("The basis type must be Real or Hypercomplex. (No coefficients found.)")
 
     class Hypercomplex(Numeric):
+        """A class that represents a hypercomplex number, level > 0 of the Cayley-Dickson construction."""
         dimensions = 2 * basis.dimensions
 
-        # a is the "real" left half. b is the "imaginary" right half.
         def __init__(self, *args, pair=False):
             if pair:
-                self.a, self.b = map(basis, args)
+                self.a, self.b = map(basis, args)  # a is the "real" left half. b is the "imaginary" right half.
             else:
                 if len(args) == 1:
                     if hasattr(args[0], 'coefficients'):
@@ -128,6 +135,7 @@ def cayley_dickson_construction(basis):
 
         @staticmethod
         def coerce(other):
+            """Attempts to coerce other to this Hypercomplex type."""
             try:
                 return Hypercomplex(other)
             except TypeError:
@@ -135,25 +143,31 @@ def cayley_dickson_construction(basis):
 
         @staticmethod
         def base():
+            """Returns the base type these numbers were based on."""
             return basis.base()
 
         @property
-        def real(self):
+        def real(self):  # Added so Hypercomplex numbers behave like other Python number types.
+            """The real (leftmost) coefficient of the hypercomplex number as the base type."""
             return self.real_coefficient()
 
         @property
-        def imag(self):
+        def imag(self):  # Added so Hypercomplex numbers behave like other Python number types.
+            """Returns the imaginary (second leftmost) coefficient of the hypercomplex number as the base type."""
             if len(self) == 2:
                 return Hypercomplex.base()(self.b)
             return self.a.imag
 
         def real_coefficient(self):  # Returns base type.
+            """Returns the real (leftmost) coefficient of the hypercomplex number as the base type."""
             return self.a.real_coefficient()
 
-        def coefficients(self):  # Returns tuple of base type.
+        def coefficients(self):  # Returns tuple of base types.
+            """Returns a tuple of base types of all the coefficients of the hypercomplex number."""
             return self.a.coefficients() + self.b.coefficients()
 
         def conjugate(self):
+            """Returns the conjugate of the hypercomplex number."""
             return Hypercomplex(self.a.conjugate(), -self.b, pair=True)
 
         def __hash__(self):
@@ -250,7 +264,7 @@ def cayley_dickson_construction(basis):
 
 
 def cayley_dickson_algebra(level, base=float):
-    """TODO"""
+    """Creates the type for the Cayley-Dickson algebra with 2**level dimensions. e.g. 0 for Real, 1 for Complex, 2 for Quaternion."""
     if not isinstance(level, int) or level < 0:
         raise ValueError("The level must be a positive integer.")
     numbers = reals(base)
@@ -262,7 +276,7 @@ def cayley_dickson_algebra(level, base=float):
 cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
-# Named based on https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
+# Names taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
 R = Real = CD1 = reals()                               # level 0 -> 1 dimension
 C = Complex = CD2 = cayley_dickson_construction(R)     # level 1 -> 2 dimensions
 Q = Quaternion = CD4 = cayley_dickson_construction(C)  # level 2 -> 4 dimensions
@@ -272,109 +286,3 @@ P = Pathion = CD32 = cayley_dickson_construction(S)    # level 5 -> 32 dimension
 X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimensions
 U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
 V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
-
-# X = reals(int)
-# Y = cayley_dickson_construction(float)
-
-exit()
-r = C(9, 88676)
-print(2j * r)
-
-print(r.real, r.imag)
-print(type(r.real), type(r.imag))
-
-c = complex(C(4+8j))
-print(c, type(c))
-
-
-# print(C(1+2j).conjugate() == (1+2j).conjugate())
-
-print(type(r.norm()))
-print(type(abs(r)))
-c = C(-3, 4)
-
-print(type(c.norm()))
-print(type(abs(c)))
-
-q = Q(1, 2, 3, 4)
-
-
-# print(complex(q))  # == 1+7j == r)
-# print(1+7j)
-
-# print(int(r), float(r), complex(r), Decimal(r), bool(r))
-
-print(complex(c))
-print(float(c))
-
-print(complex(q))
-print(float(q))
-print(4.5+6j == c)
-
-# print(5 in q)
-# d = {r: 6}
-# print(d)
-
-# print(hash(r), hash((99, 0)))
-# print(hash(q))
-
-# # http://sites.science.oregonstate.edu/coursewikis/GO/book/go/sedenions.html
-# e = Sedenion(Octonion(0), Octonion(1), pair=True)
-# e2 = Sedenion(Octonion(1), Octonion(0), pair=True)
-# p = Octonion(1, 2, 3, 4, 5, 6, 7, 8)
-
-# # print(p * e2 == p)
-# # print(p * e)  # it works!
-
-# # print(Trigintaduonion.e_matrix())
-
-# i = Sedenion.e(1)
-# j = Sedenion.e(2)
-# k = Sedenion.e(3)
-# l = Sedenion.e(4)
-
-# p = i*l + j*e
-# q = j*l + i*e
-
-# p = Quaternion(0, 1.234, 5, -6)
-
-# # p = Real(900)
-
-# print(p)
-# print(str(p))
-# print(repr(p))
-# print(f"{p:0.05f}")
-# print(format(p))
-# exit()
-
-# print(f'{e = !s}')
-# print(f'{i = !s}')
-# print(f'{j = !s}')
-# # print(f'{k = !s}')6
-# print(f'{l = !s}')
-# print()
-
-# print(f'{p = !s}')
-# print(f'{q = !s}')
-# print(f'{p*q = !s}')
-# print(f'{1/p = !s}')
-# print(f'{1/q = !s}')
-# # print(f'{-2/p == p }')
-# print(f'{(1/p)*(1/q) = !s}')
-
-# # il = Sedenion.e(5)
-# # il = Sedenion.e(9)
-# # je = Sedenion.e()
-# # jl = Sedenion.e()
-# # ie = Sedenion.e()
-
-
-# TODO
-# contains
-# handle complex nums nicely, use real part of others
-# test suite
-# method documentation
-# tox?
-# .real and .imag ? rename conjugate, also norm
-# __hash
-# check for and descend from import numbers ... isinstance(x, Number)?
