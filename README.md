@@ -20,10 +20,6 @@ pip install hypercomplex
 
 This package was built in Python 3.9.6 but should be compatible with most earlier Python 3 versions.
 
-## Example Usage
-
-See [examples.py](examples.py). TODO 5-6 separated examples.
-
 ## Package Contents
 
 Three functions form the core of the package:
@@ -39,18 +35,38 @@ Three functions form the core of the package:
     from hypercomplex import reals
     from decimal import Decimal
     
-    RDecimal = reals(Decimal)
-    print(RDecimal(3) * RDecimal(9)) # -> (27)
-    print(RDecimal(10) / 4)          # -> (2.5)
+    D = reals(Decimal)
+    print(D(10) / 4)   # -> (2.5)
+    print(D(3) * D(9)) # -> (27)
     ```
 
 - `cayley_dickson_construction(basis)` (alias `cd_construction`) generates a new class of hypercomplex numbers with twice the dimension of the given `basis`, which must be another hypercomplex number class or class returned from `reals`. The new class of numbers is defined recursively on the basis according the [Cayley-Dickson construction][2]. Normal math operations may be done upon its instances and with instances of other numeric types.
 
-    TODO possibly an example here.
+    ```py
+    # cayley_dickson_construction example:
+    from hypercomplex import *
+    RealNum = reals()
+    ComplexNum = cayley_dickson_construction(RealNum)
+    QuaternionNum = cayley_dickson_construction(ComplexNum)
+
+    q = QuaternionNum(1, 2, 3, 4)
+    print(q)         # -> (1 2 3 4)
+    print(1 / q)     # -> (0.0333333 -0.0666667 -0.1 -0.133333)
+    print(q + 1+2j)  # -> (2 4 3 4)
+    ```
 
 - `cayley_dickson_algebra(level, base)` (alias `cd_algebra`) is a helper function that repeatedly applies `cayley_dickson_construction` to the given `base` type `level` number of times. That is, `cayley_dickson_algebra` returns the class for the Cayley-Dickson algebra of hypercomplex numbers with `2**level` dimensions.
 
-    TODO possibly an example here.
+    ```py
+    # cayley_dickson_algebra example:
+    from hypercomplex import *
+    OctonionNum = cayley_dickson_algebra(3)
+
+    o = OctonionNum(8, 7, 6, 5, 4, 3, 2, 1)
+    print(o)              # -> (8 7 6 5 4 3 2 1)
+    print(2 * o)          # -> (16 14 12 10 8 6 4 2)
+    print(o.conjugate())  # -> (8 -7 -6 -5 -4 -3 -2 -1)
+    ```
 
 For convenience, nine internal number types are already defined, built off of each other:
 
@@ -66,9 +82,8 @@ For convenience, nine internal number types are already defined, built off of ea
 | `Routon` | `U`, `CD7` | Routon numbers with 128 hypercomplex dimensions based on `Chingon`.
 | `Voudon` | `V`, `CD8` | Voudon numbers with 256 hypercomplex dimensions based on `Routon`.
 
-**Example of using the built-in types:**
-
 ```py
+# built-in types example:
 from hypercomplex import *
 print(Real(4))              # -> (4)
 print(C(3-7j))              # -> (3 -7)
@@ -77,11 +92,23 @@ print(CD3(1.1, -2.2, 3.3))  # -> (1.1 -2.2 3.3 0 0 0 0 0)
 
 The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson) but they also may be known according to their [Latin naming conventions][6].
 
+In terms of containment they can be viewed as:
+
+```text
+[[[[[[[[[Real] Complex] Quaternion] Octonion] Sedenion] Pathion] Chingon] Routon] Voudon]
+```
+
+## Usage Examples
+
+Examples of almost all the things you can do
+
+See [examples.py](examples.py). TODO 5-6 separated examples.
+
 ## About
 
-This package was built for the novelty of it as a math and programming exercise. The operations it can perform on hypercomplex numbers are not particularly efficient due to the recursive nature of the Cayley-Dickson construction.
+I wrote this package for the novelty of it and as a math and programming exercise. The operations it can perform on hypercomplex numbers are not particularly efficient due to the recursive nature of the Cayley-Dickson construction.
 
-I, the author, am not a mathematician, only a math hobbyist, and apologize if there are glaring issues with the implementations or descriptions I have provided.
+I am not a mathematician, only a math hobbyist, and apologize if there are issues with the implementations or descriptions I have provided.
 
 [1]: https://en.wikipedia.org/wiki/Hypercomplex_number
 [2]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction
