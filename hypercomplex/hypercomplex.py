@@ -57,7 +57,8 @@ class Numeric(Number):
         """Creates a table of e(i)*e(j)'s akin to the ones found e.g. at wikipedia.org/wiki/Octonion."""
         def format_cell(cell):
             if not raw:
-                i, c = next(((i, c) for i, c in enumerate(cell.coefficients()) if c))
+                i, c = next(((i, c)
+                            for i, c in enumerate(cell.coefficients()) if c))
                 cell = f"{e}{i}"
                 if c < 0:
                     cell = "-" + cell
@@ -70,7 +71,8 @@ class Numeric(Number):
             matrix = [list(map(str, row)) for row in matrix]
             length = max(len(cell) for row in matrix for cell in row)
             offset = length - max(len(row[0]) for row in matrix)
-            rows = [' '.join(cell.rjust(length) for cell in row)[offset:] for row in matrix]
+            rows = [' '.join(cell.rjust(length)
+                             for cell in row)[offset:] for row in matrix]
             return '\n'.join(rows) + '\n'
         return matrix
 
@@ -102,7 +104,8 @@ def reals(base=float):
             """Returns the conjugate of the hypercomplex number."""
             return Real(self)
 
-        def __hash__(self):  # For simplicity, use the base's hash rather than hash of coefficients tuple.
+        # For simplicity, use the base's hash rather than hash of coefficients tuple.
+        def __hash__(self):
             return hash(base(self))
 
     return Real
@@ -111,7 +114,8 @@ def reals(base=float):
 def cayley_dickson_construction(basis):
     """Creates a type for the Cayley-Dickson algebra with twice the dimensions of the given Hypercomplex or Real basis."""
     if not hasattr(basis, 'coefficients'):
-        raise ValueError("The basis type must be Real or Hypercomplex. (No coefficients found.)")
+        raise ValueError(
+            "The basis type must be Real or Hypercomplex. (No coefficients found.)")
 
     class Hypercomplex(Numeric):
         """A class that represents a hypercomplex number, level > 0 of the Cayley-Dickson construction."""
@@ -119,7 +123,8 @@ def cayley_dickson_construction(basis):
 
         def __init__(self, *args, pair=False):
             if pair:
-                self.a, self.b = map(basis, args)  # a is the "real" left half. b is the "imaginary" right half.
+                # a is the "real" left half. b is the "imaginary" right half.
+                self.a, self.b = map(basis, args)
             else:
                 if len(args) == 1:
                     if hasattr(args[0], 'coefficients'):
@@ -127,11 +132,12 @@ def cayley_dickson_construction(basis):
                     elif isinstance(args[0], complex):
                         args = args[0].real, args[0].imag
                 if len(args) > len(self):
-                    raise TypeError(f"Too many args. Got {len(args)} expecting at most {len(self)}.")
+                    raise TypeError(
+                        f"Too many args. Got {len(args)} expecting at most {len(self)}.")
                 if len(self) != len(args):
                     args += (Hypercomplex.base()(),) * (len(self) - len(args))
-                self.a = basis(*args[:len(self)//2])
-                self.b = basis(*args[len(self)//2:])
+                self.a = basis(*args[:len(self) // 2])
+                self.b = basis(*args[len(self) // 2:])
 
         @staticmethod
         def coerce(other):
@@ -147,12 +153,14 @@ def cayley_dickson_construction(basis):
             return basis.base()
 
         @property
-        def real(self):  # Added so Hypercomplex numbers behave like other Python number types.
+        # Added so Hypercomplex numbers behave like other Python number types.
+        def real(self):
             """The real (leftmost) coefficient of the hypercomplex number as the base type."""
             return self.real_coefficient()
 
         @property
-        def imag(self):  # Added so Hypercomplex numbers behave like other Python number types.
+        # Added so Hypercomplex numbers behave like other Python number types.
+        def imag(self):
             """Returns the imaginary (second leftmost) coefficient of the hypercomplex number as the base type."""
             if len(self) == 2:
                 return Hypercomplex.base()(self.b)
@@ -180,13 +188,15 @@ def cayley_dickson_construction(basis):
             raise TypeError(f"Can't convert {self.__class__.__name__} to int.")
 
         def __float__(self):
-            raise TypeError(f"Can't convert {self.__class__.__name__} to float.")
+            raise TypeError(
+                f"Can't convert {self.__class__.__name__} to float.")
 
         def __complex__(self):
             if len(self) == 2:
                 base = Hypercomplex.base()
                 return base(self.a) + 1j * base(self.b)
-            raise TypeError(f"Can't convert {self.__class__.__name__} to complex.")
+            raise TypeError(
+                f"Can't convert {self.__class__.__name__} to complex.")
 
         def __eq__(self, other):
             coerced = Hypercomplex.coerce(other)
@@ -213,7 +223,8 @@ def cayley_dickson_construction(basis):
             return Hypercomplex(self.a + other.a, self.b + other.b, pair=True)
 
         def __radd__(self, other):
-            return Hypercomplex(other) + self  # Should never encounter a TypeError.
+            # Should never encounter a TypeError.
+            return Hypercomplex(other) + self
 
         def __mul__(self, other):
             other = Hypercomplex.coerce(other)
@@ -248,7 +259,8 @@ def cayley_dickson_construction(basis):
 
         def __truediv__(self, other):
             base = Hypercomplex.base()
-            if isinstance(other, base):  # Short circuit base type to avoid infinite recursion in inverse().
+            # Short circuit base type to avoid infinite recursion in inverse().
+            if isinstance(other, base):
                 other = base(1) / other
             else:
                 other = Hypercomplex.coerce(other)
@@ -277,12 +289,12 @@ cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
 # Names taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
-R = Real = CD1 = reals()                               # level 0 -> 1 dimension
-C = Complex = CD2 = cayley_dickson_construction(R)     # level 1 -> 2 dimensions
-Q = Quaternion = CD4 = cayley_dickson_construction(C)  # level 2 -> 4 dimensions
-O = Octonion = CD8 = cayley_dickson_construction(Q)    # level 3 -> 8 dimensions
-S = Sedenion = CD16 = cayley_dickson_construction(O)   # level 4 -> 16 dimensions
-P = Pathion = CD32 = cayley_dickson_construction(S)    # level 5 -> 32 dimensions
-X = Chingon = CD64 = cayley_dickson_construction(P)    # level 6 -> 64 dimensions
-U = Routon = CD128 = cayley_dickson_construction(X)    # level 7 -> 128 dimensions
-V = Voudon = CD256 = cayley_dickson_construction(U)    # level 8 -> 256 dimensions
+CD0 = R = Real = reals()                               # 1
+CD1 = C = Complex = cayley_dickson_construction(R)     # 2
+CD2 = Q = Quaternion = cayley_dickson_construction(C)  # 4
+CD3 = O = Octonion = cayley_dickson_construction(Q)    # 8
+CD4 = S = Sedenion = cayley_dickson_construction(O)    # 16
+CD5 = P = Pathion = cayley_dickson_construction(S)     # 32
+CD6 = X = Chingon = cayley_dickson_construction(P)     # 64
+CD7 = U = Routon = cayley_dickson_construction(X)      # 128
+CD8 = V = Voudon = cayley_dickson_construction(U)      # 256
