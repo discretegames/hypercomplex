@@ -72,22 +72,23 @@ For convenience, nine internal number types are already defined, built off of ea
 
 | Name | Aliases | Description |
 | ---- | ---- | ----------- |
-| `Real` | `R`, `CD0` | [Real numbers](https://en.wikipedia.org/wiki/Real_number) with 1 hypercomplex dimension based on `float`.
-| `Complex` | `C`, `CD1` | [Complex numbers](https://en.wikipedia.org/wiki/Complex_number) with 2 hypercomplex dimensions based on `Real`.
-| `Quaternion` | `Q`, `CD2` | [Quaternion numbers](https://en.wikipedia.org/wiki/Quaternion) with 4 hypercomplex dimensions based on `Complex`.
-| `Octonion` | `O`, `CD3` | [Octonion numbers](https://en.wikipedia.org/wiki/Octonion) with 8 hypercomplex dimensions based on `Quaternion`.
-| `Sedenion` | `S`, `CD4` | [Sedenion numbers](https://en.wikipedia.org/wiki/Sedenion) with 16 hypercomplex dimensions based on `Octonion`.
-| `Pathion` | `P`, `CD5` | Pathion numbers with 32 hypercomplex dimensions based on `Sedenion`.
-| `Chingon` | `X`, `CD6` | Chingon numbers with 64 hypercomplex dimensions based on `Pathion`.
-| `Routon` | `U`, `CD7` | Routon numbers with 128 hypercomplex dimensions based on `Chingon`.
-| `Voudon` | `V`, `CD8` | Voudon numbers with 256 hypercomplex dimensions based on `Routon`.
+| `Real` | `R`, `CD1`, `CD[0]` | [Real numbers](https://en.wikipedia.org/wiki/Real_number) with 1 hypercomplex dimension based on `float`.
+| `Complex` | `C`, `CD2`, `CD[1]` | [Complex numbers](https://en.wikipedia.org/wiki/Complex_number) with 2 hypercomplex dimensions based on `Real`.
+| `Quaternion` | `Q`, `CD4`, `CD[2]` | [Quaternion numbers](https://en.wikipedia.org/wiki/Quaternion) with 4 hypercomplex dimensions based on `Complex`.
+| `Octonion` | `O`, `CD8`, `CD[3]` | [Octonion numbers](https://en.wikipedia.org/wiki/Octonion) with 8 hypercomplex dimensions based on `Quaternion`.
+| `Sedenion` | `S`, `CD16`, `CD[4]` | [Sedenion numbers](https://en.wikipedia.org/wiki/Sedenion) with 16 hypercomplex dimensions based on `Octonion`.
+| `Pathion` | `P`, `CD32`, `CD[5]` | Pathion numbers with 32 hypercomplex dimensions based on `Sedenion`.
+| `Chingon` | `X`, `CD64`, `CD[6]` | Chingon numbers with 64 hypercomplex dimensions based on `Pathion`.
+| `Routon` | `U`, `CD128`, `CD[7]` | Routon numbers with 128 hypercomplex dimensions based on `Chingon`.
+| `Voudon` | `V`, `CD256`, `CD[8]` | Voudon numbers with 256 hypercomplex dimensions based on `Routon`.
 
 ```py
 # built-in types example:
 from hypercomplex import *
-print(Real(4))              # -> (4)
-print(C(3-7j))              # -> (3 -7)
-print(CD3(1.1, -2.2, 3.3))  # -> (1.1 -2.2 3.3 0 0 0 0 0)
+print(Real(4))               # -> (4)
+print(C(3-7j))               # -> (3 -7)
+print(CD4(1.1, -2.2, 3.3))   # -> (1.1 -2.2 3.3 0)
+print(CD[3](1, 0, 2, 0, 3))  # -> (1 0 2 0 3 0 0 0)
 ```
 
 The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson) but they also may be known according to their [Latin naming conventions][6].

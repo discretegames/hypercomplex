@@ -290,12 +290,13 @@ cd_algebra = cayley_dickson_algebra
 
 # Names and letters taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
 # that appears in https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson.
-CD0 = R = Real = reals()                               # 1
-CD1 = C = Complex = cayley_dickson_construction(R)     # 2
-CD2 = Q = Quaternion = cayley_dickson_construction(C)  # 4
-CD3 = O = Octonion = cayley_dickson_construction(Q)    # 8
-CD4 = S = Sedenion = cayley_dickson_construction(O)    # 16
-CD5 = P = Pathion = cayley_dickson_construction(S)     # 32
-CD6 = X = Chingon = cayley_dickson_construction(P)     # 64
-CD7 = U = Routon = cayley_dickson_construction(X)      # 128
-CD8 = V = Voudon = cayley_dickson_construction(U)      # 256
+CD1 = R = Real = reals()
+CD2 = C = Complex = cayley_dickson_construction(CD1)
+CD4 = Q = Quaternion = cayley_dickson_construction(CD2)
+CD8 = O = Octonion = cayley_dickson_construction(CD4)
+CD16 = S = Sedenion = cayley_dickson_construction(CD8)
+CD32 = P = Pathion = cayley_dickson_construction(CD16)
+CD64 = X = Chingon = cayley_dickson_construction(CD32)
+CD128 = U = Routon = cayley_dickson_construction(CD64)
+CD256 = V = Voudon = cayley_dickson_construction(CD128)
+CD = CD1, CD2, CD4, CD8, CD16, CD32, CD64, CD128, CD256

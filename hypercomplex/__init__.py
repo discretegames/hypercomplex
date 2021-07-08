@@ -4,27 +4,29 @@ __all__ = """
 reals
 cayley_dickson_construction cd_construction
 cayley_dickson_algebra cd_algebra
-CD0 R Real
-CD1 C Complex
-CD2 Q Quaternion
-CD3 O Octonion
-CD4 S Sedenion
-CD5 P Pathion
-CD6 X Chingon
-CD7 U Routon
-CD8 V Voudon
+CD1 R Real
+CD2 C Complex
+CD4 Q Quaternion
+CD8 O Octonion
+CD16 S Sedenion
+CD32 P Pathion
+CD64 X Chingon
+CD128 U Routon
+CD256 V Voudon
+CD
 """.split()
 
 from hypercomplex.hypercomplex import \
     reals, \
     cayley_dickson_construction, cd_construction, \
     cayley_dickson_algebra, cd_algebra, \
-    CD0, R, Real,\
-    CD1, C, Complex, \
-    CD2, Q, Quaternion, \
-    CD3, O, Octonion, \
-    CD4, S, Sedenion, \
-    CD5, P, Pathion, \
-    CD6, X, Chingon, \
-    CD7, U, Routon, \
-    CD8, V, Voudon
+    CD1, R, Real,\
+    CD2, C, Complex, \
+    CD4, Q, Quaternion, \
+    CD8, O, Octonion, \
+    CD16, S, Sedenion, \
+    CD32, P, Pathion, \
+    CD64, X, Chingon, \
+    CD128, U, Routon, \
+    CD256, V, Voudon, \
+    CD
