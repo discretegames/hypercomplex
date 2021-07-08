@@ -8,6 +8,9 @@ from math import sqrt
 class Numeric(Number):
     """A parent class for Real and Hypercomplex for shared behaviors."""
 
+    def copy(self):
+        return self.__class__(self)
+
     def inverse(self):
         """Returns the multiplicative inverse of the number."""
         return self.conjugate() / self.norm_squared()
