@@ -288,7 +288,8 @@ def cayley_dickson_algebra(level, base=float):
 cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
-# Names taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
+# Names and letters taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
+# that appears in https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson.
 CD0 = R = Real = reals()                               # 1
 CD1 = C = Complex = cayley_dickson_construction(R)     # 2
 CD2 = Q = Quaternion = cayley_dickson_construction(C)  # 4

@@ -1,7 +1,7 @@
 from os import path
 from setuptools import setup
 
-version = "0.1.4"
+version = "0.1.5"
 
 directory = path.abspath(path.dirname(__file__))
 with open(path.join(directory, 'README.md'), encoding='utf-8') as file:
@@ -12,7 +12,7 @@ setup(
     version=version,
     author='discretegames',
     author_email='discretizedgames@gmail.com',
-    description="Library for arbitrary hypercomplex numbers following the Cayley-Dickson construction.",
+    description="Library for arbitrary-dimension hypercomplex numbers following the Cayley-Dickson construction.",
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/discretegames/hypercomplex',

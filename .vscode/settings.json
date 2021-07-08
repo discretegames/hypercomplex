@@ -1,5 +1,6 @@
 {
 	"cSpell.words": [
+		"Cayley",
 		"chingon",
 		"hypercomplex",
 		"imag",
@@ -10,5 +11,6 @@
 		"sedenion",
 		"voudon"
 	],
-	"python.pythonPath": "C:\\Users\\r\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
+	"python.pythonPath": "C:\\Users\\r\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+	"python.formatting.autopep8Args": ["--ignore=E402"]
 }
