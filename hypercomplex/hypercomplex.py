@@ -39,7 +39,7 @@ class Numeric(Number):
         return format(self)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}[{len(self)}]" + str(self)
+        return str(self)
 
     def __format__(self, format_spec):
         if not format_spec:

@@ -101,9 +101,26 @@ In terms of containment they can be viewed as:
 
 ## Usage Examples
 
-Examples of almost all the things you can do
+This list follows [example.py](example.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
 
-See [examples.py](examples.py). TODO 5-6 separated examples.
+Every example assumes the appropriate imports are already done, e.g. `from hypercomplex import *`.
+
+1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
+
+    ```py
+    Real(-1.5)
+    Complex(2, 3)
+    Complex(2 + 3j)
+    Quaternion(4, 5, 6, 7)
+    Quaternion(4 + 5j, Complex(6, 7), pair=True)
+    Sedenion()
+    ```
+
+2. TODO more
+
+    ```py
+    todo
+    ```
 
 ## About
 

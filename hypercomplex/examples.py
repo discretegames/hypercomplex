@@ -1,23 +1,46 @@
-from hypercomplex import cayley_dickson_algebra
+from hypercomplex import Real, Complex, Quaternion, Sedenion
+
+# %% 1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
+Real(-1.5)
+Complex(2, 3)
+Complex(2 + 3j)
+Quaternion(4, 5, 6, 7)
+Quaternion(4 + 5j, Complex(6, 7), pair=True)
+Sedenion()
+# %%
 
 
-# q1 = Quaternion(1, 2, 3, 4)
-# print(2 * q1)
+"""examples todo
 
-# q2 = Quaternion(0, 0, 1, 0)
-# print(q1 * q2)
-# print(q2 * q1)
+quaternions noncommutative
+octonions nonassociative
+Pathion zero divisors
 
+inverse
+norm_squared
+norm
+abs
+len
+getitem
+contains
+format custom
 
-# print(Octonion.e_matrix())
-# print(Octonion.e(6))
+e
+e_matrix
 
+base
+real_coeff
+coefficients
+conjugate
+real
+imag
+complex
+equality
+negate
+add
+mul
+pow
+sub
+div
 
-# from decimal import Decimal
-# # RealDecimal = reals(Decimal)
-from hypercomplex import reals
-from decimal import Decimal
-
-RDecimal = reals(Decimal)
-print(RDecimal(3) * RDecimal(9))
-print(RDecimal(10) / 4)
+copy"""
