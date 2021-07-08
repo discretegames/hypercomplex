@@ -2,9 +2,13 @@
 
 **A Python package for working with arbitrary-dimension [hypercomplex numbers][1] following the [Cayley-Dickson construction][2] of algebras.**
 
-TODO custom image like [this one][4].
+As many know, the [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
 
+In a similar way, a [quaternion](https://en.wikipedia.org/wiki/Quaternion), which has 4 components, can be constructed by combining two complex numbers. Likewise, two quaternions can construct an [octonion](https://en.wikipedia.org/wiki/Octonion) (8 components), and two octonions can construct a [sedenion](https://en.wikipedia.org/wiki/Sedenion) (16 components).
 
+The method for this construction is known as the [Cayley-Dickson construction][2] and the resulting classes of numbers are types of [hypercomplex numbers][1]. There is no limit to the number of times you can repeat the Cayley-Dickson construction to create new types of hypercomplex numbers, doubling the number of components each time.
+
+This Python 3 package allows the creation of number classes at any repetition level of Cayley-Dickson constructions, and has built-ins for the smaller, named levels such as quaternion, octonion, and sedenion.
 
 ## Installation
 
@@ -28,7 +32,7 @@ Three functions form the core of the package:
 
     Any usual math operations on instances of the class returned by `reals` behave as instances of `base` would but their type remains the reals class. By default they are printed with the `g` [format-spec][7] and surrounded by parentheses, e.g. `(1)`, to remain consistent with the format of higher dimension hypercomplex numbers.
 
-    Python's [`decimal.Decimal` type](https://docs.python.org/3/library/decimal.html) might be another likely choice for `base`.
+    Python's [`decimal.Decimal`](https://docs.python.org/3/library/decimal.html) might be another likely choice for `base`.
 
     ```py
     # reals example:
@@ -71,14 +75,13 @@ print(C(3-7j))              # -> (3 -7)
 print(CD3(1.1, -2.2, 3.3))  # -> (1.1 -2.2 3.3 0 0 0 0 0)
 ```
 
-The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson) but they also may be known according to their [Latin naming conventions][6].\
+The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson) but they also may be known according to their [Latin naming conventions][6].
 
 ## About
 
 This package was built for the novelty of it as a math and programming exercise. The operations it can perform on hypercomplex numbers are not particularly efficient due to the recursive nature of the Cayley-Dickson construction.
 
 I, the author, am not a mathematician, only a math hobbyist, and apologize if there are glaring issues with the implementations or descriptions I have provided.
-
 
 [1]: https://en.wikipedia.org/wiki/Hypercomplex_number
 [2]: https://en.wikipedia.org/wiki/Cayley%E2%80%93Dickson_construction

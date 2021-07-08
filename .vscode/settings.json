@@ -2,14 +2,21 @@
 	"cSpell.words": [
 		"Cayley",
 		"chingon",
+		"chingons",
 		"hypercomplex",
 		"imag",
 		"octonion",
+		"octonions",
 		"pathion",
+		"pathions",
 		"quaternion",
+		"quaternions",
 		"routon",
+		"routons",
 		"sedenion",
-		"voudon"
+		"sedenions",
+		"voudon",
+		"voudons"
 	],
 	"python.pythonPath": "C:\\Users\\r\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
 	"python.formatting.autopep8Args": ["--ignore=E402"]
