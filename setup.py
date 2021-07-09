@@ -1,7 +1,7 @@
 from os import path
 from setuptools import setup
 
-version = "0.2.0"
+version = "0.2.1"
 
 directory = path.abspath(path.dirname(__file__))
 with open(path.join(directory, 'README.md'), encoding='utf-8') as file:
