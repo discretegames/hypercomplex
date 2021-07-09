@@ -108,18 +108,13 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
 1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
 
     ```py
-    Real(-1.5)
-    Complex(2, 3)
-    Complex(2 + 3j)
-    Quaternion(4, 5, 6, 7)
-    Quaternion(4 + 5j, Complex(6, 7), pair=True)
-    Sedenion()
-    ```
-
-2. TODO more
-
-    ```py
-    todo
+    print(Real(-1.5))                                        # -> (-1.5)
+    print(Complex(2, 3))                                     # -> (2 3)
+    print(Complex(2 + 3j))                                   # -> (2 3)
+    print(Quaternion(4, 5, 6, 7))                            # -> (4 5 6 7)
+    if 1:
+        print(Quaternion(4 + 5j, Complex(6, 7), pair=True))  # -> (4 5 6 7)
+    print(Sedenion())                                        # -> (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
     ```
 
 ## About

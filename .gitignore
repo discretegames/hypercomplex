@@ -5,3 +5,4 @@ __pycache__/
 hypercomplex.egg-info/
 dist/
 build/
+examples.md
