@@ -52,3 +52,23 @@ def examples_to_markdown():
 
 if __name__ == "__main__":
     examples_to_markdown()
+
+# This is the only multiline example and examples_to_markdown can't handle it. Saving it here to avoid manually making it again.
+e_matrix_example = """
+
+11. `e_matrix` of a number class gives the multiplication table of `e(i)*e(j)`. Set `string=False` to get a 2D list instead of a string. Set `raw=True` to get the raw hypercomplex numbers.
+
+    ```py
+    print(O.e_matrix())                        # -> e1  e2  e3  e4  e5  e6  e7
+                                               #   -e0  e3 -e2  e5 -e4 -e7  e6
+                                               #   -e3 -e0  e1  e6  e7 -e4 -e5
+                                               #    e2 -e1 -e0  e7 -e6  e5 -e4
+                                               #   -e5 -e6 -e7 -e0  e1  e2  e3
+                                               #    e4 -e7  e6 -e1 -e0 -e3  e2
+                                               #    e7  e4 -e5 -e2  e3 -e0 -e1
+                                               #   -e6  e5  e4 -e3 -e2  e1 -e0
+                                               #
+    print(C.e_matrix(string=False, raw=True))  # -> [[(1 0), (0 1)], [(0 1), (-1 0)]]
+    ```
+
+"""

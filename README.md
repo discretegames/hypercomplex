@@ -95,7 +95,7 @@ The names and letter-abbreviations were taken from [this image][3] ([mirror][4])
 
 ## Usage Examples
 
-This list follows [example.py](example.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
+This list follows [examples.py](examples.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
 
 Every example assumes the appropriate imports are already done, e.g. `from hypercomplex import *`.
 
@@ -137,7 +137,18 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(R(2).inverse(), 1 / R(2))           # -> (0.5) (0.5)
     ```
 
-5. `conjugate` gives the conjugate of the number.
+5. Numbers can be raised to integer powers, a shortcut for repeated multiplication or division.
+
+    ```py
+    q = Q(0, 3, 4, 0)
+    print(q**5)               # -> (0 1875 2500 0)
+    print(q * q * q * q * q)  # -> (0 1875 2500 0)
+    print(q**-1)              # -> (0 -0.12 -0.16 0)
+    print(1 / q)              # -> (0 -0.12 -0.16 0)
+    print(q**0)               # -> (1 0 0 0)
+    ```
+
+6. `conjugate` gives the conjugate of the number.
 
     ```py
     print(R(9).conjugate())           # -> (9)
@@ -145,7 +156,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(Q(9, 8, 7, 6).conjugate())  # -> (9 -8 -7 -6)
     ```
 
-6. `norm` gives the absolute value as the base type (`float` by default). There is also `norm_squared`.
+7. `norm` gives the absolute value as the base type (`float` by default). There is also `norm_squared`.
 
     ```py
     print(O(3, 4).norm(), type(O(3, 4).norm()))  # -> 5.0 <class 'float'>
@@ -153,7 +164,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(O(3, 4).norm_squared())                # -> 25.0
     ```
 
-7. Numbers are considered equal if their coefficients all match. Non-existent coefficients are 0.
+8. Numbers are considered equal if their coefficients all match. Non-existent coefficients are 0.
 
     ```py
     print(R(999) == V(999))         # -> True
@@ -161,7 +172,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(C(1, 2) == Q(1, 2, 0.1))  # -> False
     ```
 
-8. `coefficients` gives a tuple of the components of the number in their base type (`float` by default). The properties `real` and `imag` are shortcuts for the first two components. Indexing can also be used (but is inefficient).
+9. `coefficients` gives a tuple of the components of the number in their base type (`float` by default). The properties `real` and `imag` are shortcuts for the first two components. Indexing can also be used (but is inefficient).
 
     ```py
     print(R(100).coefficients())   # -> (100.0,)
@@ -171,7 +182,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(q[0], q[1], q[2], q[3])  # -> 2.0 3.0 4.0 5.0
     ```
 
-9. `e(index)` of a number class gives the unit hypercomplex number where the index coefficient is 1 and all others are 0.
+10. `e(index)` of a number class gives the unit hypercomplex number where the index coefficient is 1 and all others are 0.
 
     ```py
     print(C.e(0))  # -> (1 0)
@@ -179,7 +190,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(O.e(3))  # -> (0 0 0 1 0 0 0 0)
     ```
 
-10. `e_matrix` of a number class gives the multiplication table of `e(i)*e(j)`. Set `string=False` to get a 2D list instead of a string. Set `raw=True` to get the raw hypercomplex numbers.
+11. `e_matrix` of a number class gives the multiplication table of `e(i)*e(j)`. Set `string=False` to get a 2D list instead of a string. Set `raw=True` to get the raw hypercomplex numbers.
 
     ```py
     print(O.e_matrix())                        # -> e1  e2  e3  e4  e5  e6  e7
@@ -194,7 +205,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(C.e_matrix(string=False, raw=True))  # -> [[(1 0), (0 1)], [(0 1), (-1 0)]]
     ```
 
-11. A number is considered truthy if it has has non-zero coefficients. Conversion to `int`, `float` and `complex` are only valid when the coefficients beyond the dimension of those types are all 0.
+12. A number is considered truthy if it has has non-zero coefficients. Conversion to `int`, `float` and `complex` are only valid when the coefficients beyond the dimension of those types are all 0.
 
     ```py
     print(bool(Q()))                    # -> False
@@ -205,7 +216,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     # print(float(C(1, 2))) <- invalid
     ```
 
-12. Any usual format spec for the base type can be given in an f-string.
+13. Any usual format spec for the base type can be given in an f-string.
 
     ```py
     o = O(0.001, 1, -2, 3.3333, 4e5)
@@ -213,7 +224,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(f"{R(23.9):04.0f}")         # -> (0024)
     ```
 
-13. The `len` of a number is its hypercomplex dimension, i.e. the number of components or coefficients it has.
+14. The `len` of a number is its hypercomplex dimension, i.e. the number of components or coefficients it has.
 
     ```py
     print(len(R()))      # -> 1
@@ -221,14 +232,14 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(len(U()))      # -> 128
     ```
 
-14. Using `in` behaves the same as if the number were a tuple of its coefficients.
+15. Using `in` behaves the same as if the number were a tuple of its coefficients.
 
     ```py
     print(3 in Q(1, 2, 3, 4))  # -> True
     print(5 in Q(1, 2, 3, 4))  # -> False
     ```
 
-15. `copy` can be used to duplicate a number (but should generally not be needed).
+16. `copy` can be used to duplicate a number (but should generally never be needed as all operations create a new number).
 
     ```py
     x = O(9, 8, 7)
@@ -237,13 +248,25 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(x is y)   # -> False
     ```
 
-16. `base` on a number class will return the base type the entire numbers are built upon.
+17. `base` on a number class will return the base type the entire numbers are built upon.
 
     ```py
     print(R.base())                      # -> <class 'float'>
     print(V.base())                      # -> <class 'float'>
     A = cayley_dickson_algebra(20, int)
     print(A.base())                      # -> <class 'int'>
+    ```
+
+18. Hypercomplex numbers are weird, so be careful! Here two non-zero sedenions multiply to give zero because sedenions and beyond have zero devisors.
+
+    ```py
+    s1 = S.e(5) + S.e(10)
+    s2 = S.e(6) + S.e(9)
+    print(s1)                                    # -> (0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0)
+    print(s2)                                    # -> (0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0)
+    print(s1 * s2)                               # -> (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    print((1 / s1) * (1 / s2))                   # -> (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    # print(1/(s1 * s2)) <- zero division error
     ```
 
 ## About
