@@ -25,7 +25,7 @@ def print_results(lines):
 
 
 def example_to_markdown(example):
-    lines = example.strip().splitlines()
+    lines = example.splitlines()
     start = f'{lines[0]}\n\n    ```py\n'
     lines = lines[1:]
     longest = max(map(len, lines))
@@ -41,7 +41,8 @@ def example_to_markdown(example):
 
 def examples_to_markdown():
     with open(os.path.join('hypercomplex', 'examples.py')) as f:
-        examples = f.read().split('# %%')[1:]
+        examples = [e.strip() for e in f.read().split('# %%')]
+        examples = [e for e in examples[1::2] if e][1:]
     markdown = '\n'.join(map(example_to_markdown, examples))
     with open('examples.md', 'w') as f:
         f.write(markdown)

@@ -2,9 +2,9 @@
 
 **A Python package for working with quaternions, octonions, sedenions, and beyond following the [Cayley-Dickson construction][2] of [hypercomplex numbers][1].**
 
-### **[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)**
+*[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)*
 
-### Overview
+## Overview
 
 As many know, the [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
 
@@ -103,17 +103,7 @@ This list follows [example.py](example.py) exactly and documents nearly all the 
 
 Every example assumes the appropriate imports are already done, e.g. `from hypercomplex import *`.
 
-1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
-
-    ```py
-    print(Real(-1.5))                                        # -> (-1.5)
-    print(Complex(2, 3))                                     # -> (2 3)
-    print(Complex(2 + 3j))                                   # -> (2 3)
-    print(Quaternion(4, 5, 6, 7))                            # -> (4 5 6 7)
-    if 1:
-        print(Quaternion(4 + 5j, Complex(6, 7), pair=True))  # -> (4 5 6 7)
-    print(Sedenion())                                        # -> (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
-    ```
+[coming soon]
 
 ## About
 
