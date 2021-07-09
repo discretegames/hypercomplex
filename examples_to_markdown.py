@@ -5,7 +5,7 @@ import io
 import sys
 
 
-def print_results(lines):
+def get_print_results(lines):
     header = "from hypercomplex import *\n"
     code = header + '\n'.join(lines)
     stdout = sys.stdout
@@ -30,7 +30,7 @@ def example_to_markdown(example):
     lines = lines[1:]
     longest = max(map(len, lines))
     middle = []
-    for line, output in print_results(lines):
+    for line, output in get_print_results(lines):
         if output is not None:
             padding = longest - len(line)
             line += ' ' * padding + f'  # -> {output}'
@@ -42,11 +42,12 @@ def example_to_markdown(example):
 def examples_to_markdown():
     with open(os.path.join('hypercomplex', 'examples.py')) as f:
         examples = [e.strip() for e in f.read().split('# %%')]
-        examples = [e for e in examples[1::2] if e][1:]
+        examples = [e for e in examples if e][1:]
     markdown = '\n'.join(map(example_to_markdown, examples))
     with open('examples.md', 'w') as f:
         f.write(markdown)
-    print(markdown)
+    print(f"Converted {len(examples)} examples to markdown.")
+    # print(markdown)
 
 
 if __name__ == "__main__":

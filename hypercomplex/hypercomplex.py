@@ -56,7 +56,7 @@ class Numeric(Number):
         return cls(*coefficients)
 
     @classmethod
-    def e_matrix(cls, table=True, raw=False, e="e"):
+    def e_matrix(cls, string=True, raw=False, e="e"):
         """Creates a table of e(i)*e(j)'s akin to the ones found e.g. at wikipedia.org/wiki/Octonion."""
         def format_cell(cell):
             if not raw:
@@ -70,7 +70,7 @@ class Numeric(Number):
         ees = list(map(cls.e, range(cls.dimensions)))
         matrix = [[format_cell(i * j) for j in ees] for i in ees]
 
-        if table:
+        if string:
             matrix = [list(map(str, row)) for row in matrix]
             length = max(len(cell) for row in matrix for cell in row)
             offset = length - max(len(row[0]) for row in matrix)

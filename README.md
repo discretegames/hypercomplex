@@ -2,7 +2,7 @@
 
 **A Python package for working with quaternions, octonions, sedenions, and beyond following the Cayley-Dickson construction of hypercomplex numbers.**
 
-*[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)*
+*[Overview](#overview) | [Installation](#installation) | [Package Contents](#package-contents) | [Usage Examples](#usage-examples) | [About](#about)*
 
 ## Overview
 
@@ -103,7 +103,152 @@ This list follows [example.py](example.py) exactly and documents nearly all the 
 
 Every example assumes the appropriate imports are already done, e.g. `from hypercomplex import *`.
 
-[coming soon]
+1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
+
+    ```py
+    print(R(-1.5))                        # -> (-1.5)
+    print(C(2, 3))                        # -> (2 3)
+    print(C(2 + 3j))                      # -> (2 3)
+    print(Q(4, 5, 6, 7))                  # -> (4 5 6 7)
+    print(Q(4 + 5j, C(6, 7), pair=True))  # -> (4 5 6 7)
+    print(P())                            # -> (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    ```
+
+2. Numbers can be added and subtracted. The result will be the type with more dimensions.
+
+    ```py
+    print(Q(0, 1, 2, 2) + C(9, -1))                   # -> (9 0 2 2)
+    print(100.1 - O(0, 0, 0, 0, 1.1, 2.2, 3.3, 4.4))  # -> (100.1 0 0 0 -1.1 -2.2 -3.3 -4.4)
+    ```
+
+3. Numbers can be multiplied. The result will be the type with more dimensions.
+
+    ```py
+    print(10 * S(1, 2, 3))                    # -> (10 20 30 0 0 0 0 0 0 0 0 0 0 0 0 0)
+    print(Q(1.5, 2.0) * O(0, -1))             # -> (2 -1.5 0 0 0 0 0 0)
+    
+    # notice quaternions are non-commutative
+    print(Q(1, 2, 3, 4) * Q(1, 0, 0, 1))      # -> (-3 5 1 5)
+    print(Q(1, 0, 0, 1) * Q(1, 2, 3, 4))      # -> (-3 -1 5 5)
+    ```
+
+4. Numbers can be divided and `inverse` gives the multiplicative inverse.
+
+    ```py
+    print(100 / C(0, 2))                      # -> (0 -50)
+    print(C(2, 2) / Q(1, 2, 3, 4))            # -> (0.2 -0.0666667 0.0666667 -0.466667)
+    print(C(2, 2) * Q(1, 2, 3, 4).inverse())  # -> (0.2 -0.0666667 0.0666667 -0.466667)
+    print(R(2).inverse(), 1 / R(2))           # -> (0.5) (0.5)
+    ```
+
+5. `conjugate` gives the conjugate of the number.
+
+    ```py
+    print(R(9).conjugate())           # -> (9)
+    print(C(9, 8).conjugate())        # -> (9 -8)
+    print(Q(9, 8, 7, 6).conjugate())  # -> (9 -8 -7 -6)
+    ```
+
+6. `norm` gives the absolute value as the base type (`float` by default). There is also `norm_squared`.
+
+    ```py
+    print(O(3, 4).norm(), type(O(3, 4).norm()))  # -> 5.0 <class 'float'>
+    print(abs(O(3, 4)))                          # -> 5.0
+    print(O(3, 4).norm_squared())                # -> 25.0
+    ```
+
+7. Numbers are considered equal if their coefficients all match. Non-existent coefficients are 0.
+
+    ```py
+    print(R(999) == V(999))         # -> True
+    print(C(1, 2) == Q(1, 2))       # -> True
+    print(C(1, 2) == Q(1, 2, 0.1))  # -> False
+    ```
+
+8. `coefficients` gives a tuple of the components of the number in their base type (`float` by default). The properties `real` and `imag` are shortcuts for the first two components. Indexing can also be used (but is inefficient).
+
+    ```py
+    print(R(100).coefficients())   # -> (100.0,)
+    q = Q(2, 3, 4, 5)
+    print(q.coefficients())        # -> (2.0, 3.0, 4.0, 5.0)
+    print(q.real, q.imag)          # -> 2.0 3.0
+    print(q[0], q[1], q[2], q[3])  # -> 2.0 3.0 4.0 5.0
+    ```
+
+9. `e(index)` of a number class gives the unit hypercomplex number where the index coefficient is 1 and all others are 0.
+
+    ```py
+    print(C.e(0))  # -> (1 0)
+    print(C.e(1))  # -> (0 1)
+    print(O.e(3))  # -> (0 0 0 1 0 0 0 0)
+    ```
+
+10. `e_matrix` of a number class gives the multiplication table of `e(i)*e(j)`. Set `string=False` to get a 2D list instead of a string. Set `raw=True` to get the raw hypercomplex numbers.
+
+    ```py
+    print(O.e_matrix())                        # -> e1  e2  e3  e4  e5  e6  e7
+                                               #   -e0  e3 -e2  e5 -e4 -e7  e6
+                                               #   -e3 -e0  e1  e6  e7 -e4 -e5
+                                               #    e2 -e1 -e0  e7 -e6  e5 -e4
+                                               #   -e5 -e6 -e7 -e0  e1  e2  e3
+                                               #    e4 -e7  e6 -e1 -e0 -e3  e2
+                                               #    e7  e4 -e5 -e2  e3 -e0 -e1
+                                               #   -e6  e5  e4 -e3 -e2  e1 -e0
+                                               #
+    print(C.e_matrix(string=False, raw=True))  # -> [[(1 0), (0 1)], [(0 1), (-1 0)]]
+    ```
+
+11. A number is considered truthy if it has has non-zero coefficients. Conversion to `int`, `float` and `complex` are only valid when the coefficients beyond the dimension of those types are all 0.
+
+    ```py
+    print(bool(Q()))                    # -> False
+    print(bool(Q(0, 0, 0.01, 0)))       # -> True
+    
+    print(complex(Q(5, 5)))             # -> (5+5j)
+    print(int(V(9.9)))                  # -> 9
+    # print(float(C(1, 2))) <- invalid
+    ```
+
+12. Any usual format spec for the base type can be given in an f-string.
+
+    ```py
+    o = O(0.001, 1, -2, 3.3333, 4e5)
+    print(f"{o:.2f}")                 # -> (0.00 1.00 -2.00 3.33 400000.00 0.00 0.00 0.00)
+    print(f"{R(23.9):04.0f}")         # -> (0024)
+    ```
+
+13. The `len` of a number is its hypercomplex dimension, i.e. the number of components or coefficients it has.
+
+    ```py
+    print(len(R()))      # -> 1
+    print(len(C(7, 7)))  # -> 2
+    print(len(U()))      # -> 128
+    ```
+
+14. Using `in` behaves the same as if the number were a tuple of its coefficients.
+
+    ```py
+    print(3 in Q(1, 2, 3, 4))  # -> True
+    print(5 in Q(1, 2, 3, 4))  # -> False
+    ```
+
+15. `copy` can be used to duplicate a number (but should generally not be needed).
+
+    ```py
+    x = O(9, 8, 7)
+    y = x.copy()
+    print(x == y)   # -> True
+    print(x is y)   # -> False
+    ```
+
+16. `base` on a number class will return the base type the entire numbers are built upon.
+
+    ```py
+    print(R.base())                      # -> <class 'float'>
+    print(V.base())                      # -> <class 'float'>
+    A = cayley_dickson_algebra(20, int)
+    print(A.base())                      # -> <class 'int'>
+    ```
 
 ## About
 
