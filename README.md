@@ -1,6 +1,14 @@
 # Hypercomplex
 
-**A Python package for working with arbitrary-dimension [hypercomplex numbers][1] following the [Cayley-Dickson construction][2] of algebras.**
+**A Python package for working with arbitrary-dimension [hypercomplex numbers][1] following the [Cayley-Dickson construction][2].**
+
+---
+
+**[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)**
+
+---
+
+## Overview
 
 As many know, the [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
 
@@ -55,7 +63,7 @@ Three functions form the core of the package:
     print(q + 1+2j)  # -> (2 4 3 4)
     ```
 
-- `cayley_dickson_algebra(level, base)` (alias `cd_algebra`) is a helper function that repeatedly applies `cayley_dickson_construction` to the given `base` type `level` number of times. That is, `cayley_dickson_algebra` returns the class for the Cayley-Dickson algebra of hypercomplex numbers with `2**level` dimensions.
+- `cayley_dickson_algebra(level, base)` (alias `cd_algebra`) is a helper function that repeatedly applies `cayley_dickson_construction` to the given `base` type (`float` by default) `level` number of times. That is, `cayley_dickson_algebra` returns the class for the Cayley-Dickson algebra of hypercomplex numbers with `2**level` dimensions.
 
     ```py
     # cayley_dickson_algebra example:
@@ -87,17 +95,11 @@ For convenience, nine internal number types are already defined, built off of ea
 from hypercomplex import *
 print(Real(4))               # -> (4)
 print(C(3-7j))               # -> (3 -7)
-print(CD4(1.1, -2.2, 3.3))   # -> (1.1 -2.2 3.3 0)
+print(CD4(.1, -2.2, 3.3e3))  # -> (0.1 -2.2 3300 0)
 print(CD[3](1, 0, 2, 0, 3))  # -> (1 0 2 0 3 0 0 0)
 ```
 
-The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson) but they also may be known according to their [Latin naming conventions][6].
-
-In terms of containment they can be viewed as:
-
-```text
-[[[[[[[[[Real] Complex] Quaternion] Octonion] Sedenion] Pathion] Chingon] Routon] Voudon]
-```
+The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson), but they also may be known according to their [Latin naming conventions][6].
 
 ## Usage Examples
 
