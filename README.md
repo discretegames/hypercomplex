@@ -1,14 +1,10 @@
 # Hypercomplex
 
-**A Python package for working with arbitrary-dimension [hypercomplex numbers][1] following the [Cayley-Dickson construction][2].**
+**A Python package for working with quaternions, octonions, sedenions, and beyond following the [Cayley-Dickson construction][2] of [hypercomplex numbers][1].**
 
----
+### **[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)**
 
-**[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)**
-
----
-
-## Overview
+### Overview
 
 As many know, the [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
 
