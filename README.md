@@ -95,7 +95,7 @@ The names and letter-abbreviations were taken from [this image][3] ([mirror][4])
 
 ## Usage Examples
 
-This list follows [examples.py](examples.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
+This list follows [examples.py](./hypercomplex/examples.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
 
 Every example assumes the appropriate imports are already done, e.g. `from hypercomplex import *`.
 
