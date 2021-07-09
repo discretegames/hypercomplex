@@ -187,19 +187,22 @@ def cayley_dickson_construction(basis):
         def __bool__(self):
             return bool(self.a) or bool(self.b)
 
+        def convert(self, to_type, dimensions=1):
+            """Attempts to convert self to to_type. Raises an error if the conversion is impossible."""
+            coefficients = self.coefficients()
+            if any(coefficients[dimensions:]):
+                raise TypeError(
+                    f"Can't convert {self.__class__.__name__}[{self.dimensions}] to {to_type.__name__} when there are non-zero incompatible coefficients.")
+            return to_type(*coefficients[:dimensions])
+
         def __int__(self):
-            raise TypeError(f"Can't convert {self.__class__.__name__} to int.")
+            return self.convert(int)
 
         def __float__(self):
-            raise TypeError(
-                f"Can't convert {self.__class__.__name__} to float.")
+            return self.convert(float)
 
         def __complex__(self):
-            if len(self) == 2:
-                base = Hypercomplex.base()
-                return base(self.a) + 1j * base(self.b)
-            raise TypeError(
-                f"Can't convert {self.__class__.__name__} to complex.")
+            return self.convert(complex, 2)
 
         def __eq__(self, other):
             coerced = Hypercomplex.coerce(other)
@@ -292,7 +295,6 @@ cd_construction = cayley_dickson_construction
 cd_algebra = cayley_dickson_algebra
 
 # Names and letters taken from https://www.mapleprimes.com/DocumentFiles/124913/419426/Figure1.JPG
-# that appears in https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson.
 CD1 = R = Real = reals()
 CD2 = C = Complex = cayley_dickson_construction(CD1)
 CD4 = Q = Quaternion = cayley_dickson_construction(CD2)

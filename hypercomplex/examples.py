@@ -1,4 +1,3 @@
-
 # %% 0. Imports
 from hypercomplex import \
     reals, \
@@ -16,7 +15,6 @@ from hypercomplex import \
     CD
 # %%
 
-
 # %% 1. Initialization can be done in various ways, including using Python's built in complex numbers. Unspecified coefficients become 0.
 print(Real(-1.5))
 print(Complex(2, 3))
@@ -24,6 +22,10 @@ print(Complex(2 + 3j))
 print(Quaternion(4, 5, 6, 7))
 print(Quaternion(4 + 5j, Complex(6, 7), pair=True))
 print(Sedenion())
+
+
+# %% 2. Numbers can be added and subtracted.
+print(complex(Q()))
 
 
 # %%
