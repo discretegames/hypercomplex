@@ -1,6 +1,9 @@
 name: Build and Upload Python Package to TestPyPI
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   publish-to-test-pypi:
