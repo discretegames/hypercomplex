@@ -1,6 +1,6 @@
 # Hypercomplex
 
-**A Python package for working with quaternions, octonions, sedenions, and beyond following the [Cayley-Dickson construction][2] of [hypercomplex numbers][1].**
+**A Python package for working with quaternions, octonions, sedenions, and beyond following the Cayley-Dickson construction of hypercomplex numbers.**
 
 *[Overview](#overview) | [Installation](#installation) | [Package Contents](#packagecontents) | [Usage Examples](#usageexamples) | [About](#about)*
 
