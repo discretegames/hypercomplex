@@ -1,7 +1,7 @@
 from os import path
 from setuptools import setup
 
-version = "0.2.3"
+version = "0.2.4"
 
 directory = path.abspath(path.dirname(__file__))
 with open(path.join(directory, 'README.md'), encoding='utf-8') as file:
@@ -19,6 +19,6 @@ setup(
     packages=['hypercomplex'],
     install_requires=['mathdunders>=0.4.1'],
     license="MIT",
-    keywords=['python', 'math', 'complex', 'number', 'hypercomplex', 'Cayley',
-              'Dickson', 'construction', 'algebra', 'quaternion', 'octonion', 'sedenion']
+    keywords=['python', 'math', 'complex', 'number', 'hypercomplex', 'Cayley', 'Dickson', 'construction',
+              'algebra', 'quaternion', 'octonion', 'sedenion', 'pathion', 'chingon', 'routon', 'voudon']
 )

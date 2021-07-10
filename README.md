@@ -1,14 +1,16 @@
 # Hypercomplex
 
-**A Python package for working with quaternions, octonions, sedenions, and beyond following the Cayley-Dickson construction of hypercomplex numbers.**
+**A Python library for working with quaternions, octonions, sedenions, and beyond following the Cayley-Dickson construction of hypercomplex numbers.**
 
-As many know, the [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
+The [complex numbers](https://en.wikipedia.org/wiki/Complex_number) may be viewed as an extension of the everyday [real numbers](https://en.wikipedia.org/wiki/Real_number). A complex number has two real-number coefficients, one multiplied by 1, the other multiplied by [i](https://en.wikipedia.org/wiki/Imaginary_unit).
 
 In a similar way, a [quaternion](https://en.wikipedia.org/wiki/Quaternion), which has 4 components, can be constructed by combining two complex numbers. Likewise, two quaternions can construct an [octonion](https://en.wikipedia.org/wiki/Octonion) (8 components), and two octonions can construct a [sedenion](https://en.wikipedia.org/wiki/Sedenion) (16 components).
 
 The method for this construction is known as the [Cayley-Dickson construction][2] and the resulting classes of numbers are types of [hypercomplex numbers][1]. There is no limit to the number of times you can repeat the Cayley-Dickson construction to create new types of hypercomplex numbers, doubling the number of components each time.
 
-This Python 3 package allows the creation of number classes at any repetition level of Cayley-Dickson constructions, and has built-ins for the smaller, named levels such as quaternion, octonion, and sedenion.
+This Python 3 package allows the creation of number classes at any repetition level of Cayley-Dickson constructions, and has built-ins for the lower, named levels such as quaternion, octonion, and sedenion.
+
+[![Hypercomplex numbers containment diagram][8]][8]
 
 ## Installation
 
@@ -282,3 +284,4 @@ I am not a mathematician, only a math hobbyist, and apologize if there are issue
 [5]: https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson
 [6]: https://english.stackexchange.com/q/234607
 [7]: https://docs.python.org/3/library/string.html#format-specification-mini-language
+[8]: https://raw.githubusercontent.com/discretegames/hypercomplex/main/diagram/diagram.png
