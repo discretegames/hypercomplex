@@ -6,3 +6,4 @@ hypercomplex.egg-info/
 dist/
 build/
 examples.md
+.idea/

@@ -20,5 +20,13 @@ setup(
     install_requires=['mathdunders>=0.4.1'],
     license="MIT",
     keywords=['python', 'math', 'complex', 'number', 'hypercomplex', 'Cayley', 'Dickson', 'construction',
-              'algebra', 'quaternion', 'octonion', 'sedenion', 'pathion', 'chingon', 'routon', 'voudon']
+              'algebra', 'quaternion', 'octonion', 'sedenion', 'pathion', 'chingon', 'routon', 'voudon'],
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Education",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+    ]
 )
