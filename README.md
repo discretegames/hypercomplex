@@ -20,13 +20,43 @@ pip install hypercomplex
 
 [View on PyPI](https://pypi.org/project/hypercomplex) - [View on GitHub](https://github.com/discretegames/hypercomplex)
 
-This package was built in Python 3.9.6 but should be compatible with most earlier Python 3 versions.
+This package was built in Python 3.9.6 and should be compatible with most earlier Python 3 versions.
+
+## Basic Usage
+
+```py
+from hypercomplex import Complex, Quaternion, Octonion, Voudon, cayley_dickson_construction
+
+c = Complex(0, 7)
+print(c)        # -> (0 7)
+print(c == 7j)  # -> True
+
+q = Quaternion(1.1, 2.2, 3.3, 4.4)
+print(2 * q)  # -> (2.2 4.4 6.6 8.8)
+
+print(Quaternion.e_matrix())  # -> e0  e1  e2  e3
+                              #    e1 -e0  e3 -e2
+                              #    e2 -e3 -e0  e1
+                              #    e3  e2 -e1 -e0
+
+o = Octonion(0, 0, 0, 0, 8, 8, 9, 9)
+print(o + q)  # -> (1.1 2.2 3.3 4.4 8 8 9 9)
+
+v = Voudon()
+print(v == 0)  # -> True
+print(len(v))  # -> 256
+
+BeyondVoudon = cayley_dickson_construction(Voudon)
+print(len(BeyondVoudon()))  # -> 512
+```
+
+For more snippets see the Thorough Usage Examples section below.
 
 ## Package Contents
 
 Three functions form the core of the package:
 
-- `reals(base)` - Given a base type (`float` by default), generates a class that represents numbers with 1 hypercomplex dimension, i.e. [real numbers](https://en.wikipedia.org/wiki/Real_number). This class can then be extended into complex numbers and beyond with `cayley_dickson_construction`.
+-   `reals(base)` - Given a base type (`float` by default), generates a class that represents numbers with 1 hypercomplex dimension, i.e. [real numbers](https://en.wikipedia.org/wiki/Real_number). This class can then be extended into complex numbers and beyond with `cayley_dickson_construction`.
 
     Any usual math operations on instances of the class returned by `reals` behave as instances of `base` would but their type remains the reals class. By default they are printed with the `g` [format-spec][7] and surrounded by parentheses, e.g. `(1)`, to remain consistent with the format of higher dimension hypercomplex numbers.
 
@@ -36,13 +66,13 @@ Three functions form the core of the package:
     # reals example:
     from hypercomplex import reals
     from decimal import Decimal
-    
+
     D = reals(Decimal)
     print(D(10) / 4)   # -> (2.5)
     print(D(3) * D(9)) # -> (27)
     ```
 
-- `cayley_dickson_construction(basis)` (alias `cd_construction`) generates a new class of hypercomplex numbers with twice the dimension of the given `basis`, which must be another hypercomplex number class or class returned from `reals`. The new class of numbers is defined recursively on the basis according the [Cayley-Dickson construction][2]. Normal math operations may be done upon its instances and with instances of other numeric types.
+-   `cayley_dickson_construction(basis)` (alias `cd_construction`) generates a new class of hypercomplex numbers with twice the dimension of the given `basis`, which must be another hypercomplex number class or class returned from `reals`. The new class of numbers is defined recursively on the basis according the [Cayley-Dickson construction][2]. Normal math operations may be done upon its instances and with instances of other numeric types.
 
     ```py
     # cayley_dickson_construction example:
@@ -57,7 +87,7 @@ Three functions form the core of the package:
     print(q + 1+2j)  # -> (2 4 3 4)
     ```
 
-- `cayley_dickson_algebra(level, base)` (alias `cd_algebra`) is a helper function that repeatedly applies `cayley_dickson_construction` to the given `base` type (`float` by default) `level` number of times. That is, `cayley_dickson_algebra` returns the class for the Cayley-Dickson algebra of hypercomplex numbers with `2**level` dimensions.
+-   `cayley_dickson_algebra(level, base)` (alias `cd_algebra`) is a helper function that repeatedly applies `cayley_dickson_construction` to the given `base` type (`float` by default) `level` number of times. That is, `cayley_dickson_algebra` returns the class for the Cayley-Dickson algebra of hypercomplex numbers with `2**level` dimensions.
 
     ```py
     # cayley_dickson_algebra example:
@@ -72,17 +102,17 @@ Three functions form the core of the package:
 
 For convenience, nine internal number types are already defined, built off of each other:
 
-| Name | Aliases | Description |
-| ---- | ---- | ----------- |
-| `Real` | `R`, `CD1`, `CD[0]` | [Real numbers](https://en.wikipedia.org/wiki/Real_number) with 1 hypercomplex dimension based on `float`.
-| `Complex` | `C`, `CD2`, `CD[1]` | [Complex numbers](https://en.wikipedia.org/wiki/Complex_number) with 2 hypercomplex dimensions based on `Real`.
-| `Quaternion` | `Q`, `CD4`, `CD[2]` | [Quaternion numbers](https://en.wikipedia.org/wiki/Quaternion) with 4 hypercomplex dimensions based on `Complex`.
-| `Octonion` | `O`, `CD8`, `CD[3]` | [Octonion numbers](https://en.wikipedia.org/wiki/Octonion) with 8 hypercomplex dimensions based on `Quaternion`.
-| `Sedenion` | `S`, `CD16`, `CD[4]` | [Sedenion numbers](https://en.wikipedia.org/wiki/Sedenion) with 16 hypercomplex dimensions based on `Octonion`.
-| `Pathion` | `P`, `CD32`, `CD[5]` | Pathion numbers with 32 hypercomplex dimensions based on `Sedenion`.
-| `Chingon` | `X`, `CD64`, `CD[6]` | Chingon numbers with 64 hypercomplex dimensions based on `Pathion`.
-| `Routon` | `U`, `CD128`, `CD[7]` | Routon numbers with 128 hypercomplex dimensions based on `Chingon`.
-| `Voudon` | `V`, `CD256`, `CD[8]` | Voudon numbers with 256 hypercomplex dimensions based on `Routon`.
+| Name         | Aliases               | Description                                                                                                       |
+| ------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `Real`       | `R`, `CD1`, `CD[0]`   | [Real numbers](https://en.wikipedia.org/wiki/Real_number) with 1 hypercomplex dimension based on `float`.         |
+| `Complex`    | `C`, `CD2`, `CD[1]`   | [Complex numbers](https://en.wikipedia.org/wiki/Complex_number) with 2 hypercomplex dimensions based on `Real`.   |
+| `Quaternion` | `Q`, `CD4`, `CD[2]`   | [Quaternion numbers](https://en.wikipedia.org/wiki/Quaternion) with 4 hypercomplex dimensions based on `Complex`. |
+| `Octonion`   | `O`, `CD8`, `CD[3]`   | [Octonion numbers](https://en.wikipedia.org/wiki/Octonion) with 8 hypercomplex dimensions based on `Quaternion`.  |
+| `Sedenion`   | `S`, `CD16`, `CD[4]`  | [Sedenion numbers](https://en.wikipedia.org/wiki/Sedenion) with 16 hypercomplex dimensions based on `Octonion`.   |
+| `Pathion`    | `P`, `CD32`, `CD[5]`  | Pathion numbers with 32 hypercomplex dimensions based on `Sedenion`.                                              |
+| `Chingon`    | `X`, `CD64`, `CD[6]`  | Chingon numbers with 64 hypercomplex dimensions based on `Pathion`.                                               |
+| `Routon`     | `U`, `CD128`, `CD[7]` | Routon numbers with 128 hypercomplex dimensions based on `Chingon`.                                               |
+| `Voudon`     | `V`, `CD256`, `CD[8]` | Voudon numbers with 256 hypercomplex dimensions based on `Routon`.                                                |
 
 ```py
 # built-in types example:
@@ -93,9 +123,9 @@ print(CD4(.1, -2.2, 3.3e3))  # -> (0.1 -2.2 3300 0)
 print(CD[3](1, 0, 2, 0, 3))  # -> (1 0 2 0 3 0 0 0)
 ```
 
-The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [*Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)*](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson), but they also may be known according to their [Latin naming conventions][6].
+The names and letter-abbreviations were taken from [this image][3] ([mirror][4]) found in Micheal Carter's paper [_Visualization of the Cayley-Dickson Hypercomplex Numbers Up to the Chingons (64D)_](https://www.mapleprimes.com/posts/124913-Visualization-Of-The-CayleyDickson), but they also may be known according to their [Latin naming conventions][6].
 
-## Usage Examples
+## Thorough Usage Examples
 
 This list follows [examples.py](https://github.com/discretegames/hypercomplex/blob/main/hypercomplex/examples.py) exactly and documents nearly all the things you can do with the hypercomplex numbers created by this package.
 
@@ -124,7 +154,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     ```py
     print(10 * S(1, 2, 3))                    # -> (10 20 30 0 0 0 0 0 0 0 0 0 0 0 0 0)
     print(Q(1.5, 2.0) * O(0, -1))             # -> (2 -1.5 0 0 0 0 0 0)
-    
+
     # notice quaternions are non-commutative
     print(Q(1, 2, 3, 4) * Q(1, 0, 0, 1))      # -> (-3 5 1 5)
     print(Q(1, 0, 0, 1) * Q(1, 2, 3, 4))      # -> (-3 -1 5 5)
@@ -212,7 +242,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     ```py
     print(bool(Q()))                    # -> False
     print(bool(Q(0, 0, 0.01, 0)))       # -> True
-    
+
     print(complex(Q(5, 5)))             # -> (5+5j)
     print(int(V(9.9)))                  # -> 9
     # print(float(C(1, 2))) <- invalid
