@@ -3,6 +3,7 @@
 from mathdunders import mathdunders
 from numbers import Number
 from math import sqrt
+from functools import lru_cache
 
 
 class Numeric(Number):
@@ -80,6 +81,7 @@ class Numeric(Number):
         return matrix
 
 
+@lru_cache()
 def reals(base=float):
     """Creates a type that represents real numbers based on a numeric type base."""
     if not issubclass(base, Number):
@@ -114,6 +116,7 @@ def reals(base=float):
     return Real
 
 
+@lru_cache()
 def cayley_dickson_construction(basis):
     """Creates a type for the Cayley-Dickson algebra with twice the dimensions of the given Hypercomplex or Real basis."""
     if not hasattr(basis, 'coefficients'):
@@ -281,6 +284,7 @@ def cayley_dickson_construction(basis):
     return Hypercomplex
 
 
+@lru_cache()
 def cayley_dickson_algebra(level, base=float):
     """Creates the type for the Cayley-Dickson algebra with 2**level dimensions. e.g. 0 for Real, 1 for Complex, 2 for Quaternion."""
     if not isinstance(level, int) or level < 0:
