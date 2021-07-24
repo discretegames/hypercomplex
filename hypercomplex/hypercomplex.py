@@ -85,7 +85,7 @@ class Numeric(Number):
 def reals(base=float):
     """Creates a type that represents real numbers based on a numeric type base."""
     if not issubclass(base, Number):
-        raise ValueError("The base type must be derived from numbers.Number.")
+        raise TypeError("The base type must be derived from numbers.Number.")
 
     @mathdunders(base=base)
     class Real(Numeric, base):
