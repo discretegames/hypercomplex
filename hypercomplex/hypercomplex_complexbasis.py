@@ -22,7 +22,7 @@ class Numeric(Number):
 
     def norm(self):  # Returns base type.
         """Returns the norm of the number as the base type."""
-        return sqrt(self.norm_squared())
+        return sqrt(self.norm_squared().real)
 
     def __abs__(self):  # Returns base type.
         return self.norm()
@@ -81,39 +81,7 @@ class Numeric(Number):
         return matrix
 
 
-@lru_cache()
-def reals(base=float):
-    """Creates a type that represents real numbers based on a numeric type base."""
-    if not issubclass(base, Number):
-        raise TypeError("The base type must be derived from numbers.Number.")
 
-    @mathdunders(base=base)
-    class Real(Numeric, base):
-        """A class that represents a real number, level 0 of the Cayley-Dickson construction."""
-        dimensions = 1
-
-        @staticmethod
-        def base():
-            """Returns the base type these numbers were based on."""
-            return base
-
-        def real_coefficient(self):  # Returns base type.
-            """Returns the real (leftmost) coefficient of the hypercomplex number as the base type."""
-            return base(self)
-
-        def coefficients(self):  # Returns tuple of base types.
-            """Returns a tuple of base types of all the coefficients of the hypercomplex number."""
-            return (self.real_coefficient(),)
-
-        def conjugate(self):
-            """Returns the conjugate of the hypercomplex number."""
-            return Real(self)
-
-        # For simplicity, use the base's hash rather than hash of coefficients tuple.
-        def __hash__(self):
-            return hash(base(self))
-    print(base)
-    return Real
 
 @lru_cache()
 def complexes(base=complex, baseName=float):
