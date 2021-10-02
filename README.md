@@ -20,7 +20,7 @@ pip install hypercomplex
 
 [View on PyPI](https://pypi.org/project/hypercomplex) - [View on GitHub](https://github.com/discretegames/hypercomplex)
 
-This package was built in Python 3.9.6 and should be compatible with most earlier Python 3 versions.
+This package was built in Python 3.9.6 and has been tested to be compatible with python 3.6 through 3.10.
 
 ## Basic Usage
 
