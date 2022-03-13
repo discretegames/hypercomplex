@@ -289,7 +289,7 @@ Every example assumes the appropriate imports are already done, e.g. `from hyper
     print(A.base())                      # -> <class 'int'>
     ```
 
-18. Hypercomplex numbers are weird, so be careful! Here two non-zero sedenions multiply to give zero because sedenions and beyond have zero devisors.
+18. Hypercomplex numbers are weird, so be careful! Here two non-zero sedenions multiply to give zero because sedenions and beyond have zero divisors.
 
     ```py
     s1 = S.e(5) + S.e(10)
