@@ -1,10 +1,10 @@
 """This package provides a way to work with hypercomplex number algebras following the Cayley-Dickson construction."""
 
 __all__ = """
-reals
+complexes
 cayley_dickson_construction cd_construction
 cayley_dickson_algebra cd_algebra
-CD1 R Real
+CD1 CB ComplexBasis
 CD2 C Complex
 CD4 Q Quaternion
 CD8 O Octonion
@@ -17,10 +17,10 @@ CD
 """.split()
 
 from hypercomplex.hypercomplex import \
-    reals, \
+    complexes, \
     cayley_dickson_construction, cd_construction, \
     cayley_dickson_algebra, cd_algebra, \
-    CD1, R, Real,\
+    CD1, CB, ComplexBasis,\
     CD2, C, Complex, \
     CD4, Q, Quaternion, \
     CD8, O, Octonion, \
